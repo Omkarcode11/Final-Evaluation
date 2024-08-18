@@ -3,7 +3,7 @@ import './App.css'
 import AuthPage from './page/AuthPage/AuthPage'
 import Signup from './components/auth/signup/SignupForm'
 import Login from './components/auth/login/LoginForm'
-import HomePage from './page/HomePage'
+import HomePage from './page/hompage/HomePage'
 
 function App() {
   let route = createBrowserRouter([
