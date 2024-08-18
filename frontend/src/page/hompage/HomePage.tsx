@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import HomeNavigation from '../../components/navigation/HomeNavigation'
+import classes from './HomePage.module.css'
 
 function HomePage() {
-    let navigate = useNavigate()
 
-    useEffect(()=>{
-        navigate('/auth/login')
-    },[])
   return (
-    <div>HomePage</div>
+    <div className={classes.container}>
+      <HomeNavigation/>
+      <Outlet/>
+    </div>
   )
 }
 

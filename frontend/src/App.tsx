@@ -12,8 +12,8 @@ function App() {
   let route = createBrowserRouter([
     {path:"/",element:<HomePage/>,children:[
       {path:'dashboard',element:<Dashboard/>},
-      {path:'Analytics',element:<Analytics/>},
-      {path:'Create Quiz',element:<CreateQuiz/>},
+      {path:'analytics',element:<Analytics/>},
+      {path:'createquiz',element:<CreateQuiz/>},
     ]},
     {path:'/auth',element:<AuthPage/>,children:[
       {path:'login',element:<Login/>,index:true},
