@@ -1,0 +1,18 @@
+.container{
+    padding: 3rem 1rem;
+    width: 89%;
+    text-align: center;
+}
+
+.header{
+  color:  #5076FF;
+    
+}
+
+.quizTableContainer{
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
