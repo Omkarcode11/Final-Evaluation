@@ -1,23 +1,48 @@
-type Props = {}
+import { FormEvent, MutableRefObject, Ref, useRef, useState } from 'react'
+import classes from './QuizTypeForm.module.css'
+import { quizNameType } from '../../Types/Quize'
 
-function QuizTypeForm({}: Props) {
+type Props = {
+  onClose:()=>void
+  setNameType:(data:quizNameType)=>void
+}
+
+
+function QuizTypeForm({onClose,setNameType}: Props) {
+  let nameRef = useRef<HTMLInputElement>(null)
+  let [select,setSelect] = useState<"POLL" | "QA" | "none" >('none')
+  let [data,setData] = useState<quizNameType>()
+  
+  function submitHandler(e:FormEvent<HTMLFormElement>){
+     e.preventDefault()
+     if(nameRef.current && nameRef.current.value!=null && select!="none"){
+       let data:quizNameType = {name:nameRef.current?.value,type:select}
+        setNameType(data)
+      }
+  }
+
+
   return (
-    <div>
-        <div>
-            <input type="text" placeholder="Quiz Name" />
+    <form className={classes.formContainer} onSubmit={submitHandler}>
+        <div className={''}>
+            <input className={classes.quizNameInput} ref={nameRef} required type="text" placeholder="Quiz Name" />
         </div>
-        <div>
+        <div className={classes.radioGroup}>
            <label>Quiz Type</label>
-           <label>
+           <label className={select=='QA'?`${classes.radioLabel} ${classes.active}`:`${classes.radioLabel}`} >
             Q & A
-           <input type="radio" name="quizType"/>
+           <input className={classes.inputRadio} onClick={()=>setSelect("QA")}  required type="radio" name="quizType"/>
            </label>
-           <label>
+           <label className={select=='POLL'?`${classes.radioLabel} ${classes.active}`:`${classes.radioLabel}`}>
             Poll Type
-           <input type="radio" name="quizType"/>
-           </label>
+           <input className={classes.inputRadio} onClick={()=>setSelect("POLL")} required type="radio" name="quizType"/>
+           </label >
         </div>
-    </div>
+        <div className={classes.buttonContainer}>
+         <button className={classes.btn} type='button' onClick={onClose}>Cancel</button>
+         <button className={`${classes.btn} ${classes.active}`}>Continue</button>
+        </div>
+    </form>
   )
 }
 

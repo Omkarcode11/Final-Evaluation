@@ -8,13 +8,7 @@ type Props = {
     onClose:()=>void
 };
 
-const Modal = ({ children }: Props) => {
-
-    let [show,setShow] = useState(true)
-
-    function onClose(){
-        setShow(prev=>false)
-    }
+const Modal = ({ show,onClose,children }: Props) => {
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {

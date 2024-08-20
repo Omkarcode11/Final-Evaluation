@@ -14,7 +14,7 @@ function HomeNavigation({}: Props) {
     </div>
     <div>
     <hr/>
-    <h2>Logout</h2>
+    <h2 className={classes.logout}>Logout</h2>
     </div>
     </div>
   )
