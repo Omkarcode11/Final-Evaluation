@@ -3,6 +3,7 @@ import Modal from "../modal/Modal";
 import QuizTypeForm from "../form/QuizTypeForm";
 import QuestionAnswerForm from "../form/questionAnswerForm/QuestionAnswerForm";
 import { Quiz, quizNameType } from "../../Types/Quize";
+import SuccessCreateQuiz from "../success/SuccessCreateQuiz";
 
 type Props = {};
 
@@ -10,10 +11,19 @@ function CreateQuiz({}: Props) {
   const [show, setShow] = useState(true);
   const [quiz, setQuiz] = useState<Quiz | null>(null); // Ensures quiz can be null initially
   const [step, setStep] = useState(true);
+  const [success,setSuccess] = useState(false)
 
   function hide() {
-    console.log("Modal closed");
     setShow(false);
+  }
+
+  function hideSuccessfulModal(){
+    console.log('is it working?')
+    setSuccess(_=>false)
+  }
+
+  function showSuccessfulModal(){
+   setSuccess(_=>true)
   }
 
   function setQuizTypeName(data: quizNameType) {
@@ -31,8 +41,11 @@ function CreateQuiz({}: Props) {
           <QuizTypeForm onClose={hide} setNameType={setQuizTypeName} />
         ) : (
           quiz?.type!=undefined &&
-          <QuestionAnswerForm quizType={quiz?.type} quizName={quiz.name} />
+          <QuestionAnswerForm quizType={quiz?.type} quizName={quiz.name} onClose={hide} />
         )}
+      </Modal>
+      <Modal onClose={hideSuccessfulModal} show={success}>
+        <SuccessCreateQuiz onClose={hideSuccessfulModal}/>
       </Modal>
     </div>
   );

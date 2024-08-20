@@ -13,7 +13,6 @@ const Modal = ({ show,onClose,children }: Props) => {
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            console.log(target.classList[0]);
             if(target.classList[0]=='modal' && show){
                  onClose()
             }

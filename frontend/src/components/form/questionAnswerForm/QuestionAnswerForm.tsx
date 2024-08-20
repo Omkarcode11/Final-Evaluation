@@ -2,10 +2,12 @@ import React, { FormEvent, useRef, useState } from "react";
 import styles from "./questionAnswerForm.module.css";
 import add from "./../../../assets/add.svg";
 import del from "./../../../assets/deleteIcon.svg";
+import close from './../../../assets/close.svg'
 
 type Prop = {
   quizType: "QA" | "POLL";
   quizName: string;
+  onClose : ()=>void
 };
 
 interface Options {
@@ -21,17 +23,19 @@ interface Option {
   ImageUrl: string;
 }
 
-const QuestionAnswerForm = ({ quizType, quizName }: Prop) => {
+const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
   const [questions, setQuestions] = useState<Options[]>([
-    {question:'', optionType: "Text", options: [], correctAnswer: "", timer: "OFF" },
+    {question:'', optionType: "Text", options: [{ImageUrl:"",text:""}], correctAnswer: "", timer: "OFF" },
   ]);
   const [selectedIndex,setSelectedIndex] = useState<number>(0)
 
   function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    console.log(questions)
   }
 
-  function saveAndAddQuestionHandler() {
+  function saveAndAddQuestionHandler(e:FormEvent) {
+    e.preventDefault()
     setQuestions((prev) => [
       ...prev,
       {question:'', optionType: questions[selectedIndex].optionType, options: [], correctAnswer: "", timer: "OFF" },
@@ -48,6 +52,7 @@ const QuestionAnswerForm = ({ quizType, quizName }: Prop) => {
   }
 
   function setOptionType(str:"Text" | "ImageUrl" | "TextImageUrl" ){
+
       setQuestions(prev=>{
         let newQuestions = [...prev]
          newQuestions[selectedIndex].optionType = str
@@ -99,13 +104,33 @@ const QuestionAnswerForm = ({ quizType, quizName }: Prop) => {
 
   }
 
+  function deleteQuestion(index: number) {
+    setQuestions((prev) => {
+      let newQuestions = [...prev];
+      newQuestions.splice(index, 1); // Remove the selected question
+  
+      if (newQuestions.length === 0) {
+        setSelectedIndex(0); // If no questions left, reset selectedIndex to 0
+      } else if (index <= selectedIndex) {
+        setSelectedIndex((prevSelectedIndex) => 
+          prevSelectedIndex > 0 ? prevSelectedIndex - 1 : 0
+        );
+      }
+  
+      return newQuestions;
+    });
+  }
+
   
   return (
     <form className={styles.container} onSubmit={submitHandler}>
       <div className={styles.allQuestions}>
         <div className={styles.pileContainer}>
           {questions.map((_, i) => (
-            <span onClick={()=>setSelectedIndex(prev=>i)} className={selectedIndex==i?`${styles.border}`:""}>{i + 1}</span>
+            <span onClick={()=>setSelectedIndex(prev=>i)} className={selectedIndex==i?`${styles.border} ${styles.questionNum}`:`${i!=0 && styles.questionNum}`}>
+               <img src={close} onClick={()=>deleteQuestion(i)} className={styles.close}/>
+              {i + 1}
+              </span>
           ))}
           {questions.length < 5 && (
             <button
@@ -219,7 +244,7 @@ const QuestionAnswerForm = ({ quizType, quizName }: Prop) => {
       </div>
 
       <div className={styles.btnGroup}>
-        <button className={styles.cancel}>Cancel</button>
+        <button onClick={onClose} className={styles.cancel}>Cancel</button>
         <button className={styles.addQuestion}>Create</button>
       </div>
     </form>
