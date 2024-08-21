@@ -1,9 +1,10 @@
 // SignupForm.tsx
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
 import classes from "./SignupForm.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import { context } from "../../context/MyContextApp";
 
 interface FormData {
   username: string;
@@ -29,6 +30,13 @@ const SignupForm: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const ctx = useContext(context);
+
+  if (!ctx) {
+    throw new Error("SomeComponent must be used within a MyContextApp");
+  }
+
+  const { setUser } = ctx;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,11 +69,17 @@ const SignupForm: React.FC = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      let { token }: { token: string } = (
-        await axios.post(BASE_URL + "/api/auth/register", formData)
-      ).data;
-      localStorage.setItem("quiz_builder", JSON.stringify(token));
-      navigate('/dashboard')
+      let res = await axios.post(BASE_URL + "/api/auth/register", formData)
+      if(res.status == 201){
+        let token : {token:string} = res.data
+        localStorage.setItem("quiz_builder", token.token);
+        setUser({
+          email: formData.email,
+          isAuthorize: true,
+          username: res.data.username,
+        });
+        navigate('/dashboard')
+      }
       // Perform submission actions like sending data to a server
     }
   };

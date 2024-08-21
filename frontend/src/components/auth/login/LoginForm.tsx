@@ -1,9 +1,10 @@
 // LoginForm.tsx
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useContext } from "react";
 import styles from "./LoginForm.module.css";
 import axios from "axios";
 import { BASE_URL } from "../../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import { context } from "../../context/MyContextApp";
 
 interface FormData {
   email: string;
@@ -16,7 +17,14 @@ interface FormErrors {
 }
 
 const LoginForm: React.FC = () => {
-  const navigate = useNavigate()
+  const ctx = useContext(context);
+
+  if (!ctx) {
+    throw new Error("SomeComponent must be used within a MyContextApp");
+  }
+
+  const { setUser } = ctx;
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -43,21 +51,25 @@ const LoginForm: React.FC = () => {
     return validationErrors;
   };
 
-  const handleSubmit = async(e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log(formData)
-      let res = await axios.post(BASE_URL+"/api/auth/login",formData)
-      if(res.status==200){
-        let token:{token:string} = res.data
-         localStorage.setItem('quiz_builder',JSON.stringify(token.token))
-         navigate('/dashboard')
+      console.log(formData);
+      let res = await axios.post(BASE_URL + "/api/auth/login", formData);
+      if (res.status == 200) {
+        let token: { token: string } = res.data;
+        setUser({
+          email: formData.email,
+          isAuthorize: true,
+          username: res.data.username,
+        });
+        localStorage.setItem("quiz_builder", token.token);
+        navigate("/dashboard");
       }
     }
-    
   };
 
   return (
@@ -72,7 +84,7 @@ const LoginForm: React.FC = () => {
           className={errors.email ? styles.inputError : ""}
         />
       </div>
-        {errors.email && <div className={styles.errorText}>{errors.email}</div>}
+      {errors.email && <div className={styles.errorText}>{errors.email}</div>}
 
       <div className={styles.formGroup}>
         <label>Password</label>
@@ -84,7 +96,9 @@ const LoginForm: React.FC = () => {
           className={errors.password ? styles.inputError : ""}
         />
       </div>
-        {errors.password && <div className={styles.errorText}>{errors.password}</div>}
+      {errors.password && (
+        <div className={styles.errorText}>{errors.password}</div>
+      )}
 
       <button type="submit" className={styles.submitButton}>
         Login

@@ -3,7 +3,7 @@ import del from "./../../../assets/deleteIcon.svg";
 import { Option } from "../../../Types/Quize";
 
 type Props = {
-  quizType: "QA" | "POLL";
+  quizType: "QA" | "POLL" | 'none';
   options: Option[];
   optionType: "Text" | "ImageUrl" | "TextImageUrl";
   correctAnswer: number;

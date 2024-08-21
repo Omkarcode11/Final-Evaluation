@@ -1,12 +1,10 @@
+import { useEffect, useState } from "react"
+import useApiClient from "../../hooks/useApiClient"
 import QuizCard from "../cards/quizCard/QuizCard"
 import TrendingQuizeCard from "../cards/trendingQuizCards/TrendingQuizeCard"
 import classes from './Dashboard.module.css'
 
-let titles = [
-    {number:12,title:'Quiz',color:"#FF5D01"},
-    {number:110,title:'Questions',color:"#60B84B"},
-    {number:'1.4k',title:'Impression',color:"#5076FF"},
-]
+
 
 let quizes = [
   {name:"Quiz1",views:484,createdAt:'04 Aug 2024'},
@@ -24,6 +22,31 @@ let quizes = [
 ]
 
 function Dashboard() {
+  let {getMyStats} = useApiClient()
+  let [titles,setTitles] = useState([
+    {number:12,title:'Quiz',color:"#FF5D01"},
+    {number:110,title:'Questions',color:"#60B84B"},
+    {number:'1.4k',title:'Impression',color:"#5076FF"},
+])
+
+async function getAndSetStats(){
+  let data = await getMyStats()
+    setTitles(prev=>{
+      let newTitles = [...prev]
+      newTitles[0].number = data.quizCreated
+      newTitles[1].number = data.totalQuestions
+      newTitles[2].number = data.totalImpression
+      return newTitles
+    })
+
+}
+
+
+useEffect(()=>{
+  getAndSetStats()
+},[])
+
+ 
   return (
     <div className={classes.container}>
     <div className={classes.cardContainer}>

@@ -1,22 +1,23 @@
 import { FormEvent, MutableRefObject, Ref, useRef, useState } from 'react'
 import classes from './QuizTypeForm.module.css'
-import { quizNameType } from '../../../Types/Quize'
+import { Quiz, QuizName, quizNameType } from '../../../Types/Quize'
 
 type Props = {
   onClose:()=>void
-  setNameType:(data:quizNameType)=>void
+  setNameType:(data:QuizName)=>void
 }
+
+
 
 
 function QuizTypeForm({onClose,setNameType}: Props) {
   let nameRef = useRef<HTMLInputElement>(null)
-  let [select,setSelect] = useState<"POLL" | "QA" | "none" >('none')
-  let [data,setData] = useState<quizNameType>()
-  
+  let [select,setSelect] = useState<"POLL" | "QA"| "none" >("none")
+
   function submitHandler(e:FormEvent<HTMLFormElement>){
      e.preventDefault()
-     if(nameRef.current && nameRef.current.value!=null && select!="none"){
-       let data:quizNameType = {name:nameRef.current?.value,type:select}
+     if(nameRef.current && nameRef.current.value!=null && select!='none'){
+       let data:QuizName = {quizName:nameRef.current?.value,typeOfQuiz:select}
         setNameType(data)
       }
   }
@@ -30,7 +31,7 @@ function QuizTypeForm({onClose,setNameType}: Props) {
         <div className={classes.radioGroup}>
            <label>Quiz Type</label>
            <label className={select=='QA'?`${classes.radioLabel} ${classes.active}`:`${classes.radioLabel}`} >
-            Q & A
+            Q&A
            <input className={classes.inputRadio} onClick={()=>setSelect("QA")}  required type="radio" name="quizType"/>
            </label>
            <label className={select=='POLL'?`${classes.radioLabel} ${classes.active}`:`${classes.radioLabel}`}>

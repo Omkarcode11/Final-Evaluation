@@ -1,19 +1,19 @@
 export interface Quiz {
-  name: string;
-  type: "QA" | "POLL";
-  questions: question[];
+  quizName: string;
+  typeOfQuiz: "QA" | "POLL" | 'none';
+  questions: Options[];
 }
 
-export interface question {
-  question: string;
-  options: string[];
-  answer: string;
-  timer: string;
-}
+
 
 export interface quizNameType {
   name: string;
-  type: "QA" | "POLL";
+  type: "QA" | "POLL" | 'none';
+}
+
+export interface  QuizName {
+  quizName:string,
+  typeOfQuiz:"POLL" | "QA" | 'none'
 }
 
 

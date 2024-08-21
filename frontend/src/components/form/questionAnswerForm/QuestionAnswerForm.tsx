@@ -5,12 +5,15 @@ import QuestionTypeSelector from "../questionTypeSelector/QuestionTypeSelector";
 import OptionsContainer from "../questionContainer/OptionsContainer";
 import TimerSelector from "../timerSelector/TimerSelector";
 import ButtonGroup from "../buttonGroup/ButtonGroup";
+import useApiClient from "../../../hooks/useApiClient";
+import { Quiz } from "../../../Types/Quize";
 
 
 type Prop = {
-  quizType: "QA" | "POLL";
+  quizType: "QA" | "POLL" | "none";
   quizName: string;
   onClose: () => void;
+  showSuccessModal:()=>void;
 };
 
 interface Options {
@@ -26,7 +29,7 @@ interface Option {
   ImageUrl: string;
 }
 
-const QuestionAnswerForm = ({ quizType, quizName, onClose }: Prop) => {
+const QuestionAnswerForm = ({showSuccessModal, quizType, quizName, onClose }: Prop) => {
   const [questions, setQuestions] = useState<Options[]>([
     {
       question: "",
@@ -37,19 +40,24 @@ const QuestionAnswerForm = ({ quizType, quizName, onClose }: Prop) => {
     },
   ]);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const {createQuiz} = useApiClient()
 
   function setIndex(i:number){
     setSelectedIndex(_=>i)
   }
 
-  function submitHandler(e: FormEvent<HTMLFormElement>) {
+  async function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let data = {
+    let data:Quiz = {
       quizName:quizName,
       typeOfQuiz:quizType,
       questions:questions
     }
-    console.log(data);
+    await createQuiz(data)
+    onClose()
+    showSuccessModal()
+
+    
   }
 
   function saveAndAddQuestionHandler(e: FormEvent) {
