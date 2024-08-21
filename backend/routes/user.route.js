@@ -5,6 +5,6 @@ const { getMyQuizStats, getTrendingQuiz } = require('../controllers/user.control
 
 router.get('/getstats', protect, getMyQuizStats);
 router.get('/getTrendingQuiz', protect, getTrendingQuiz);
-
+router.get('/getMyQuizzes',protect,getMyQuizzes)
 
 module.exports = router;

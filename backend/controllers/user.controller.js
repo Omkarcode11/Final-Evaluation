@@ -44,3 +44,16 @@ exports.getTrendingQuiz = async (req, res) => {
     return res.status(500).send(err.message);
   }
 };
+
+exports.getMyQuizzes = async (req, res) => {
+  try {
+    let id = req.user._id;
+    let quizzes = await User.findById(id).populate("quizzes").select("quizzes");
+    return res.status(200).json(quizzes);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send(err.message);
+  }
+};
+
+

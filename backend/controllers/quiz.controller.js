@@ -43,4 +43,28 @@ exports.getQuizzes = async (req, res) => {
   }
 };
 
+exports.deleteQuizById = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let quiz = await Quiz.findById(id);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    if (quiz.author.toString() !== req.user._id.toString()) {
+      return res.status(400).json({ message: "Unauthorized access" });
+    }
+
+    await Quiz.findByIdAndDelete(id);
+
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { quizzes: id },
+    });
+
+    return res.status(200).json({message:"success"})
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Add more methods as needed for fetching single quiz, updating quiz, etc.
