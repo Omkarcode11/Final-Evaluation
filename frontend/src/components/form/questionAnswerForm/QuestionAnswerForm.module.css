@@ -186,3 +186,9 @@
    width: 0.5rem;
    height: 0.5rem;
 }
+
+
+.correctAnswer{
+  background-color: #52c41a;
+  color: white;
+}

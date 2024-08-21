@@ -5,7 +5,7 @@ import classes from './Dashboard.module.css'
 let titles = [
     {number:12,title:'Quiz',color:"#FF5D01"},
     {number:110,title:'Questions',color:"#60B84B"},
-    {number:'1.4k',title:'Total',color:"#5076FF"},
+    {number:'1.4k',title:'Impression',color:"#5076FF"},
 ]
 
 let quizes = [

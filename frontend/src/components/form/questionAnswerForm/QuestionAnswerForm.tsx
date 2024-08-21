@@ -1,4 +1,4 @@
-import React, { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import styles from "./questionAnswerForm.module.css";
 import add from "./../../../assets/add.svg";
 import del from "./../../../assets/deleteIcon.svg";
@@ -14,7 +14,7 @@ interface Options {
   optionType: "Text" | "ImageUrl" | "TextImageUrl";
   question:string
   options: Option[];
-  correctAnswer: string;
+  correctAnswer: Number;
   timer: "OFF" | 5 | 10;
 }
 
@@ -25,22 +25,22 @@ interface Option {
 
 const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
   const [questions, setQuestions] = useState<Options[]>([
-    {question:'', optionType: "Text", options: [{ImageUrl:"",text:""}], correctAnswer: "", timer: "OFF" },
+    {question:'', optionType: "Text", options: [{ImageUrl:"",text:""}], correctAnswer: 0, timer: "OFF" },
   ]);
   const [selectedIndex,setSelectedIndex] = useState<number>(0)
 
   function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(questions)
+    console.log(quizType,quizName,questions)
   }
 
   function saveAndAddQuestionHandler(e:FormEvent) {
     e.preventDefault()
     setQuestions((prev) => [
       ...prev,
-      {question:'', optionType: questions[selectedIndex].optionType, options: [], correctAnswer: "", timer: "OFF" },
+      {question:'', optionType: questions[selectedIndex].optionType, options: [], correctAnswer: 0, timer: "OFF", },
     ]);
-    setSelectedIndex(prev=>questions.length)
+    setSelectedIndex(_=>questions.length)
   }
 
   function setTimer(timer: "OFF" | 5 | 10) {
@@ -94,7 +94,7 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
     })
   }
 
-  function appendQuestion(e:any,i:number){
+  function appendQuestion(e:any){
     let question = e.target.value
     setQuestions(prev=>{
       let newQuestions = [...prev]
@@ -104,21 +104,33 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
 
   }
 
+  if(selectedIndex>=questions.length){
+    setSelectedIndex(_=>questions.length-1)
+  }
+
+ console.log(selectedIndex)
   function deleteQuestion(index: number) {
+
     setQuestions((prev) => {
-      let newQuestions = [...prev];
-      newQuestions.splice(index, 1); // Remove the selected question
-  
-      if (newQuestions.length === 0) {
-        setSelectedIndex(0); // If no questions left, reset selectedIndex to 0
-      } else if (index <= selectedIndex) {
-        setSelectedIndex((prevSelectedIndex) => 
-          prevSelectedIndex > 0 ? prevSelectedIndex - 1 : 0
-        );
+      if (index < 0 || index >= prev.length) {
+        console.error("Index out of bounds");
+        return prev; // Return the previous state if the index is invalid
       }
   
+      let newQuestions = [...prev];
+      newQuestions.splice(index, 1); // Remove the question at the specified index
+      
+      
       return newQuestions;
     });
+  }
+
+  function selectCorrectOption(i:number){
+       setQuestions(prev=>{
+        let allQuestion = [...prev]
+        allQuestion[selectedIndex].correctAnswer = i 
+        return allQuestion
+       })
   }
 
   
@@ -127,8 +139,8 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
       <div className={styles.allQuestions}>
         <div className={styles.pileContainer}>
           {questions.map((_, i) => (
-            <span onClick={()=>setSelectedIndex(prev=>i)} className={selectedIndex==i?`${styles.border} ${styles.questionNum}`:`${i!=0 && styles.questionNum}`}>
-               <img src={close} onClick={()=>deleteQuestion(i)} className={styles.close}/>
+            <span onClick={()=>setSelectedIndex(_=>i)} className={selectedIndex==i?`${styles.border} ${styles.questionNum}`:`${i!=0 && styles.questionNum}`}>
+             {i!=0 && <img src={close} onClick={()=>deleteQuestion(i)} className={styles.close}/>} 
               {i + 1}
               </span>
           ))}
@@ -149,44 +161,46 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
           type="text"
           className={styles.pollInput}
           placeholder="Poll Question"
-          value={questions[selectedIndex].question}
-          onChange={(e)=>appendQuestion(e,questions.length-1)}
+          value={questions[selectedIndex]?.question}
+          onChange={(e)=>appendQuestion(e)}
         />
       </div>
       <div className={styles.optionType}>
         <label>Question Type</label>
         <label>
-          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType("Text")} checked={questions[selectedIndex].optionType=='Text'}  value={'Text'} name="option" />
+          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType("Text")} checked={questions[selectedIndex]?.optionType=='Text'}  value={'Text'} name="type" />
           Text{" "}
         </label>
         <label>
-          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType("ImageUrl")} checked={questions[selectedIndex].optionType=='ImageUrl'} value={'ImageUrl'} name="option" />
+          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType("ImageUrl")} checked={questions[selectedIndex]?.optionType=='ImageUrl'} value={'ImageUrl'} name="type" />
           Image URL{" "}
         </label>
         <label>
-          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType('TextImageUrl')} checked={questions[selectedIndex].optionType=='TextImageUrl'} value={'TextImageUrl'} name="option" />
+          <input required type="radio" className={styles.radioInput} onChange={()=>setOptionType('TextImageUrl')} checked={questions[selectedIndex]?.optionType=='TextImageUrl'} value={'TextImageUrl'} name="type" />
           Text & Image URL{" "}
         </label>
       </div>
     
       <div className={styles.optionsContainer}>
         <div className={styles.options}>
-          {questions[selectedIndex].options.map((ele,i)=>
+          {questions[selectedIndex]?.options.map((ele,i)=>
           <div className={styles.option}>
-            <input required type="radio" name="option"/>
-            {questions[selectedIndex].optionType.includes('Text') &&
+            {quizType=="QA" &&
+            <input required onChange={()=>selectCorrectOption(i)}   type="radio" checked={questions[selectedIndex].correctAnswer==i}  name="option"/>
+            }
+            {questions[selectedIndex]?.optionType.includes('Text') &&
             <input required
             type="text"
-            className={styles.optionInput}
+            className={(quizType=='QA'&& questions[selectedIndex].correctAnswer==i)?`${styles.correctAnswer} ${styles.optionInput}`:`${styles.optionInput}`}
             placeholder="Text"
             value={ele.text}
             onChange={(e:any)=>appendText(e,i)}
             />
 }
-            {questions[selectedIndex].optionType.includes('ImageUrl') &&
+            {questions[selectedIndex]?.optionType.includes('ImageUrl') &&
             <input required
-            type="text"
-            className={styles.optionInput}
+            type="url"
+            className={(quizType=='QA' && questions[selectedIndex].correctAnswer==i)?`${styles.correctAnswer} ${styles.optionInput}`:`${styles.optionInput}`}
             placeholder="Image Url"
             onChange={(e:any)=>appendImageUrl(e,i)}
             value={ele.ImageUrl}
@@ -195,7 +209,7 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
             <img src={del} onClick={()=>deleteOption(i)} />
           </div> 
 )}
-          {questions[selectedIndex].options.length<4 &&
+          {questions[selectedIndex]?.options.length<4 &&
           <div className={styles.option}  onClick={addOption}>
             <div> </div>
             <div className={styles.addOption} >Add Option</div>
@@ -208,7 +222,7 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
             <div>Timer</div>
             <label
               className={
-                questions[selectedIndex].timer == "OFF"
+                questions[selectedIndex]?.timer == "OFF"
                   ? `${styles.timer} ${styles.active}`
                   : `${styles.timer}`
               }
@@ -218,7 +232,7 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
             </label>
             <label
               className={
-                questions[selectedIndex].timer == 5
+                questions[selectedIndex]?.timer == 5
                   ? `${styles.timer} ${styles.active}`
                   : `${styles.timer}`
               }
@@ -227,7 +241,7 @@ const QuestionAnswerForm = ({ quizType, quizName,onClose }: Prop) => {
             </label>
             <label
               className={
-                questions[selectedIndex].timer == 10
+                questions[selectedIndex]?.timer == 10
                   ? `${styles.timer} ${styles.active}`
                   : `${styles.timer}`
               }

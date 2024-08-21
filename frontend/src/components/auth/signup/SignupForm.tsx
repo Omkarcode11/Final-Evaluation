@@ -1,24 +1,28 @@
 // SignupForm.tsx
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import classes from "./SignupForm.module.css";
+import axios from "axios";
+import { BASE_URL } from "../../../utils/constant";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
-  name: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
 }
 
 interface FormErrors {
-  name?: string;
+  username?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
 }
 
 const SignupForm: React.FC = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -36,8 +40,8 @@ const SignupForm: React.FC = () => {
 
   const validateForm = (): FormErrors => {
     let validationErrors: FormErrors = {};
-    if (!formData.name) {
-      validationErrors.name = "Invalid name";
+    if (!formData.username) {
+      validationErrors.username = "Invalid name";
     }
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
       validationErrors.email = "Invalid Email";
@@ -51,13 +55,17 @@ const SignupForm: React.FC = () => {
     return validationErrors;
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      console.log("Form submitted successfully");
+      let { token }: { token: string } = (
+        await axios.post(BASE_URL + "/api/auth/register", formData)
+      ).data;
+      localStorage.setItem("quiz_builder", JSON.stringify(token));
+      navigate('/dashboard')
       // Perform submission actions like sending data to a server
     }
   };
@@ -68,51 +76,59 @@ const SignupForm: React.FC = () => {
         <label>Name</label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="username"
+          required
+          value={formData.username}
           onChange={handleChange}
-          className={errors.name ? classes.inputError : ""}
+          className={errors.username ? classes.inputError : ""}
         />
       </div>
-        {errors.name && <div className={classes.errorText}>{errors.name}</div>}
+      {errors.username && (
+        <div className={classes.errorText}>{errors.username}</div>
+      )}
 
       <div className={classes.formGroup}>
         <label>Email</label>
         <input
           type="email"
           name="email"
+          required
           value={formData.email}
           onChange={handleChange}
           className={errors.email ? classes.inputError : ""}
         />
       </div>
-        {errors.email && <div className={classes.errorText}>{errors.email}</div>}
+      {errors.email && <div className={classes.errorText}>{errors.email}</div>}
 
       <div className={classes.formGroup}>
         <label>Password</label>
         <input
           type="password"
           name="password"
+          required
           value={formData.password}
           onChange={handleChange}
           className={errors.password ? classes.inputError : ""}
         />
       </div>
-        {errors.password && <div className={classes.errorText}>{errors.password}</div>}
+      {errors.password && (
+        <div className={classes.errorText}>{errors.password}</div>
+      )}
 
       <div className={classes.formGroup}>
         <label>Confirm Password</label>
         <input
           type="password"
           name="confirmPassword"
+          required
           value={formData.confirmPassword}
           onChange={handleChange}
           className={errors.confirmPassword ? classes.inputError : ""}
         />
       </div>
-        {errors.confirmPassword && (
-          <div className={classes.errorText}>{errors.confirmPassword}</div>
-        )}
+      {errors.confirmPassword && (
+        <div className={classes.errorText}>{errors.confirmPassword}</div>
+      )}
 
       <button type="submit" className={classes.submitButton}>
         Sign-Up
