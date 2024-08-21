@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const questionSchema = new mongoose.Schema(
   {
+    optionType:{
+      type:String,
+      enum:["Text" , "ImageUrl" , "TextImageUrl"],
+      required:true
+    }
+,
     question: {
       type: String,
       required: true,

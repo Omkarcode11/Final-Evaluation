@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "../modal/Modal";
-import QuizTypeForm from "../form/QuizTypeForm";
+import QuizTypeForm from "../form/quizTypeForm/QuizTypeForm";
 import QuestionAnswerForm from "../form/questionAnswerForm/QuestionAnswerForm";
 import { Quiz, quizNameType } from "../../Types/Quize";
 import SuccessCreateQuiz from "../success/SuccessCreateQuiz";
