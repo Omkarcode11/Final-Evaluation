@@ -4,7 +4,8 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 // Import routes
 const quizRoutes = require("./routes/quiz.route");
-const userRoutes = require("./routes/auth.route");
+const authRoutes = require("./routes/auth.route");
+const userRoutes = require('./routes/user.route')
 const connectDB = require("./config/db");
 
 // Load environment variables
@@ -18,7 +19,8 @@ app.use(express.json());
 
 // Use routes
 app.use("/api/quiz", quizRoutes);
-app.use("/api/auth", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use('/api/user',userRoutes)
 
 // Connect to MongoDB
 connectDB()

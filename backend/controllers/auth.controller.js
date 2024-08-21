@@ -14,7 +14,7 @@ exports.registerUser = async (req, res) => {
       expiresIn: '1d',
     });
 
-    res.status(201).json({ token });
+    res.status(201).json({ token ,username:user.username});
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -32,7 +32,7 @@ exports.loginUser = async (req, res) => {
         expiresIn: '1d',
       });
 
-      res.status(200).json({ token });
+      res.status(200).json({ token ,username:user.username});
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
     }

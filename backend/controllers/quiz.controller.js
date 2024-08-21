@@ -1,9 +1,11 @@
 const Quiz = require("../models/Quiz");
 const Question = require("../models/Question");
+const User = require("../models/User");
 
 // Create a new quiz
 exports.createQuiz = async (req, res) => {
   try {
+    let userId = req.user._id;
     const { quizName, typeOfQuiz, questions } = req.body;
     let allQuestion = [];
 
@@ -11,7 +13,7 @@ exports.createQuiz = async (req, res) => {
       quizName,
       typeOfQuiz,
       questions: allQuestion,
-      author: req.user._id,
+      author: userId,
     });
 
     for (let question of questions) {
@@ -21,7 +23,9 @@ exports.createQuiz = async (req, res) => {
     }
 
     quiz.questions = [...allQuestion];
-    await quiz.save()
+    await quiz.save();
+
+    await User.findByIdAndUpdate(userId, { $push: { quizzes: quiz.id } });
 
     res.status(201).json(quiz);
   } catch (err) {

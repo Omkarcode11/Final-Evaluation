@@ -14,10 +14,6 @@ const quizSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question'
   }],
-  impression:{
-    type:Number,
-    default:0
-  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

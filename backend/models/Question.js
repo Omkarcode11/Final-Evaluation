@@ -1,24 +1,27 @@
 const mongoose = require("mongoose");
 
+const optionSchema = new mongoose.Schema({
+  text: {
+    type: String,
+  },
+  ImageUrl: {
+    type: String,
+  },
+});
+
 const questionSchema = new mongoose.Schema(
   {
-    optionType:{
-      type:String,
-      enum:["Text" , "ImageUrl" , "TextImageUrl"],
-      required:true
-    }
-,
+    optionType: {
+      type: String,
+      enum: ["Text", "ImageUrl", "TextImageUrl"],
+      required: true,
+    },
     question: {
       type: String,
       required: true,
     },
-    options: [
-      {
-        type: String,
-        required: true,
-      },
-    ],
-    poll:[{type:Number,default:[0,0,0,0]}],
+    options: [optionSchema],
+    poll: [{ type: Number, default: [0, 0, 0, 0] }],
     impression: {
       type: Number,
       default: 0,
