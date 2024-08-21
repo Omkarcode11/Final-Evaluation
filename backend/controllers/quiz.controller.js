@@ -5,15 +5,24 @@ const Question = require("../models/Question");
 exports.createQuiz = async (req, res) => {
   try {
     const { quizName, typeOfQuiz, questions } = req.body;
+    let allQuestion = [];
 
-    const quiz = new Quiz({
+    const quiz = await Quiz.create({
       quizName,
       typeOfQuiz,
-      questions,
+      questions: allQuestion,
       author: req.user._id,
     });
 
-    await quiz.save();
+    for (let question of questions) {
+      question.quizId = quiz.id;
+      let ques = await Question.create(question);
+      allQuestion.push(ques.id);
+    }
+
+    quiz.questions = [...allQuestion];
+    await quiz.save()
+
     res.status(201).json(quiz);
   } catch (err) {
     res.status(400).json({ error: err.message });

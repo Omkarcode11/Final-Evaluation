@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { createQuiz, getQuizzes } = require('../controllers/quizController');
-const { protect } = require('../middleware/authMiddleware');
+const { createQuiz, getQuizzes } = require('../controllers/quiz.controller');
+const { protect } = require('../middlewares/auth.route');
 
 // Route for creating a new quiz
 router.post('/', protect, createQuiz);

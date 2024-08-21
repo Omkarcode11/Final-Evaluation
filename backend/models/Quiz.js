@@ -7,13 +7,17 @@ const quizSchema = new mongoose.Schema({
   },
   typeOfQuiz: {
     type: String,
-    enum: ['Poll', 'Q & A'],
+    enum: ['POLL', 'QA'],
     required: true
   },
   questions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question'
   }],
+  impression:{
+    type:Number,
+    default:0
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

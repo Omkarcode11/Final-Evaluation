@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 // Import routes
-const quizRoutes = require("./routes/quizRoutes");
-const userRoutes = require("./routes/userRoutes");
+const quizRoutes = require("./routes/quiz.route");
+const userRoutes = require("./routes/auth.route");
 const connectDB = require("./config/db");
 
 // Load environment variables
@@ -18,11 +18,11 @@ app.use(express.json());
 
 // Use routes
 app.use("/api/quiz", quizRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/auth", userRoutes);
 
 // Connect to MongoDB
 connectDB()
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
