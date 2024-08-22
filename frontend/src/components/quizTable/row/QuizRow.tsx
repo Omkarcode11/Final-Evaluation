@@ -2,6 +2,7 @@ import edit from './../../../assets/edit.svg';
 import del from './../../../assets/deleteIcon.svg';
 import share from './../../../assets/share.svg';
 import classes from './QuizeRow.module.css'
+import { Link } from 'react-router-dom';
 
 type Props = {
   num:number,
@@ -25,7 +26,9 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete}: Props) {
       <img src={share}/>
     </td>
     <td className={classes.radiusEnd}>
+      <Link to={'quiz/5'} className={classes.link}>
       Question Wise Analysis
+      </Link>
     </td>
   </tr>
   )
