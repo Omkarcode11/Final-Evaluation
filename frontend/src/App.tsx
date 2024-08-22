@@ -7,7 +7,7 @@ import HomePage from './page/hompage/HomePage'
 import Dashboard from './components/dashboard/Dashboard'
 import Analytics from './components/analytics/Analytics'
 import CreateQuiz from './components/createQuize/CreateQuiz'
-import QuizAnalytics from './components/questionAnalytics/QuizAnalytics'
+import QuizAnalytics from './components/questionAnalytics/quizAnalytics/QuizAnalytics'
 
 function App() {
   let route = createBrowserRouter([
