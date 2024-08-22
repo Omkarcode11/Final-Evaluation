@@ -36,7 +36,7 @@ exports.getTrendingQuiz = async (req, res) => {
         match: { impression: { $gt: 10 } }, // Filters quizzes with impression greater than 10
         options: { sort: { createdAt: 1 } }, // Sorts by createdAt in ascending order
       })
-      .select("quizzes");
+      .select("quizName impression createdAt");
 
     return res.status(200).json(quizzes);
   } catch (err) {

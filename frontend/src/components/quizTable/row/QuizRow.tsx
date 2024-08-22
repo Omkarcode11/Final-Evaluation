@@ -8,9 +8,10 @@ type Props = {
   quizName:string,
   createdOn:string,
   impressions:string
+  showDelete:()=>void
 }
 
-function QuizRow({createdOn,impressions,num,quizName}: Props) {
+function QuizRow({createdOn,impressions,num,quizName,showDelete}: Props) {
   return (
     <tr className={classes.row}>
     <td className={classes.radiusStart}>{num}</td>
@@ -19,7 +20,8 @@ function QuizRow({createdOn,impressions,num,quizName}: Props) {
     <td>{impressions}</td>
     <td className={classes.icon}>
       <img src={edit}/>
-      <img src={del}/>
+      
+      <img src={del} onClick={showDelete}/>
       <img src={share}/>
     </td>
     <td className={classes.radiusEnd}>

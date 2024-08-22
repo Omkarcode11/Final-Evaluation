@@ -1,5 +1,8 @@
+import { useState } from 'react'
 import QuizRow from '../row/QuizRow'
 import classes from './QuizeTable.module.css'
+import ConfirmDeleteModal from '../../delete/ConfirmDeleteModal'
+import Modal from '../../modal/Modal'
 
 
 
@@ -17,7 +20,23 @@ let quizInfo = [
 type Props = {}
 
 function QuizTable({}: Props) {
+  let [showDelete,setShowDelete] = useState(false)
+
+  function onClose(){
+    setShowDelete(_=>false)
+  }
+
+  function show(){
+    setShowDelete(_=>true)
+  }
+
+  function deleteQuiz(){
+
+    onClose()
+  }
+
   return (
+    <>
     <table className={classes.tableContainer}>
     <tr className={classes.headers}>
       <th className={classes.radiusStart}>S.No</th>
@@ -28,9 +47,15 @@ function QuizTable({}: Props) {
       <th className={classes.radiusEnd}></th>
     </tr>
     {quizInfo.map((ele,i)=>
-    <QuizRow num={i} createdOn={ele.createdOn} impressions={ele.impression} quizName={ele.name}/>
+    <QuizRow showDelete={show} num={i} createdOn={ele.createdOn} impressions={ele.impression} quizName={ele.name}/>
     )}
   </table>
+  {showDelete && 
+  <Modal onClose={onClose} show={showDelete}>
+    <ConfirmDeleteModal quizDelete={deleteQuiz} cancel={onClose}/>
+  </Modal>
+  }
+    </>
   )
 }
 
