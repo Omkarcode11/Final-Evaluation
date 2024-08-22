@@ -11,7 +11,7 @@ type Props = {
   quizName:string,
   createdOn:string,
   impressions:string
-  showDelete:()=>void
+  showDelete:(id:string)=>void
   id:string
 }
 
@@ -35,7 +35,7 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id}: Props) {
     <td className={classes.icon}>
       <img src={edit}/>
       
-      <img src={del} onClick={showDelete}/>
+      <img src={del} onClick={()=>showDelete(id)}/>
       <img src={share} onClick={handleShowToast}/>
     </td>
     <td className={classes.radiusEnd}>

@@ -63,11 +63,45 @@ function useApiClient() {
      throw new Error("Not get my Quizzes")
   }
 
+  async function getQuizDetail(id:string){
+    try{
+      let res = await apiClient.get(`/api/quiz/${id}`)
+      if(res.status==200){
+        return res.data
+      }else{
+        throw new Error("server error while getting the quizDetail")
+      }
+
+    }catch(err){
+      if(err instanceof Error)
+      console.log(err.message)
+      else console.log(err)
+    }
+  }
+
+  async function deleteQuiz(id:string){
+    try{
+      let res = await apiClient.delete(`/api/quiz/${id}`)
+      if(res.status==200){
+        return true
+      }else{
+        throw new Error("server error while getting the quizDetail")
+      }
+    }catch(err){
+      if(err instanceof Error)
+      console.log(err.message)
+      else console.log(err)
+    }
+    
+  }
+
   return {
     createQuiz,
     apiClient,
     getMyStats,
     getMyQuizzes,
+    getQuizDetail,
+    deleteQuiz,
   };
 }
 

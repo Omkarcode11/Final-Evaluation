@@ -1,15 +1,23 @@
 import ImpressionBox from '../impressionBox/ImpressionBox'
 import classes from './QuestionAnalytics.module.css'
 
-function QuestionAnalytics() {
+type Props = {
+  _id:string,
+  question:string,
+  poll:number[],
+  impression:number,
+  correctImpression:number,
+  No:number
+}
+
+function QuestionAnalytics({No,_id,correctImpression,impression,poll,question}:Props) {
   return (
     <div>
-        <h2>What is React?</h2>
+        <h2>Q.{No} {question}</h2>
         <div className={classes.impressionContainer}>
-        <ImpressionBox impression={10} text='the Question'/>
-        <ImpressionBox impression={4} text='correctly'/>
-        <ImpressionBox impression={6} text='Incorrectly'/>
-        <ImpressionBox impression={6} text='Incorrectly'/>
+        <ImpressionBox impression={impression} text='the Question'/>
+        <ImpressionBox impression={correctImpression} text='correctly'/>
+        <ImpressionBox impression={impression-correctImpression} text='Incorrectly'/>
         </div>
         <hr/>
     </div>

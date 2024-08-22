@@ -6,8 +6,8 @@ const { protect } = require('../middlewares/auth.route');
 router.post('/', protect, createQuiz);
 
 // router.get('/', getQuizzes);
-router.get('/:id', getQuizById);
+router.get('/:id', protect, getQuizById);
 
-router.delete('/:id',deleteQuizById)
+router.delete('/:id',protect,deleteQuizById)
 
 module.exports = router;

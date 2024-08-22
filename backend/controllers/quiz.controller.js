@@ -46,7 +46,7 @@ exports.getQuizzes = async (req, res) => {
 exports.getQuizById = async (req,res)=>{
   try{
     let {id} = req.params
-    const quiz = await Quiz.findById(id).populate('questions')
+    const quiz = await Quiz.findById(id).select('_id quizName typeOfQuiz impression createdAt author').populate({path:'questions',select:'question poll impression correctImpression'})
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
