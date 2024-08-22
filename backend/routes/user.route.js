@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middlewares/auth.route');
-const { getMyQuizStats, getTrendingQuiz } = require('../controllers/user.controller');
+const { getMyQuizStats, getTrendingQuiz, getMyQuizzes } = require('../controllers/user.controller');
 
 router.get('/getstats', protect, getMyQuizStats);
 router.get('/getTrendingQuiz', protect, getTrendingQuiz);

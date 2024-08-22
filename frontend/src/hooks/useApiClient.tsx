@@ -55,10 +55,19 @@ function useApiClient() {
     }
   }
 
+  async function getMyQuizzes(){
+     let data = await apiClient.get('/api/user/getmyquizzes')
+     if(data.status==200){
+        return data.data.quizzes
+     }
+     throw new Error("Not get my Quizzes")
+  }
+
   return {
     createQuiz,
     apiClient,
     getMyStats,
+    getMyQuizzes,
   };
 }
 

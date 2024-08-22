@@ -36,12 +36,33 @@ exports.createQuiz = async (req, res) => {
 // Get all quizzes
 exports.getQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find().populate("author").populate("questions");
+    const quizzes = await Quiz.find().populate("author").populate("questions").select('_id quizName impression createdAt');
     res.status(200).json(quizzes);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
+
+exports.getQuizById = async (req,res)=>{
+  try{
+    let {id} = req.params
+    const quiz = await Quiz.findById(id).populate('questions')
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    if (quiz.author.toString() !== req.user._id.toString()) {
+      return res.status(400).json({ message: "Unauthorized access" });
+    }
+
+    return res.status(200).json(quiz)
+
+  }catch(err){
+    console.log(err.message)
+    return res.status(500).json(err)
+  }
+  
+}
 
 exports.deleteQuizById = async (req, res) => {
   try {

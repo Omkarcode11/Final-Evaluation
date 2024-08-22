@@ -1,7 +1,11 @@
 .tableContainer {
   border-collapse: collapse;
   border: none;
-  width: 80%;
+  width: 100%;
+}
+.container {
+  height: 34rem;
+  overflow-y: scroll;
 }
 
 .headers{

@@ -48,7 +48,13 @@ exports.getTrendingQuiz = async (req, res) => {
 exports.getMyQuizzes = async (req, res) => {
   try {
     let id = req.user._id;
-    let quizzes = await User.findById(id).populate("quizzes").select("quizzes");
+    let quizzes = await User.findById(id)
+      .populate({
+        path: 'quizzes',
+        select: '_id impression quizName createdAt' // Select _id, impression, quizName, and createdAt fields
+      })
+      .select('quizzes');
+
     return res.status(200).json(quizzes);
   } catch (err) {
     console.log(err);

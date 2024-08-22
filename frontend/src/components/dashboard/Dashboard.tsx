@@ -24,9 +24,9 @@ let quizes = [
 function Dashboard() {
   let {getMyStats} = useApiClient()
   let [titles,setTitles] = useState([
-    {number:12,title:'Quiz',color:"#FF5D01"},
-    {number:110,title:'Questions',color:"#60B84B"},
-    {number:'1.4k',title:'Impression',color:"#5076FF"},
+    {number:0,title:'Quiz',color:"#FF5D01"},
+    {number:0,title:'Questions',color:"#60B84B"},
+    {number:0,title:'Impression',color:"#5076FF"},
 ])
 
 async function getAndSetStats(){
