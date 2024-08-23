@@ -6,7 +6,7 @@ import OptionsContainer from "../questionContainer/OptionsContainer";
 import TimerSelector from "../timerSelector/TimerSelector";
 import ButtonGroup from "../buttonGroup/ButtonGroup";
 import useApiClient from "../../../hooks/useApiClient";
-import { Quiz } from "../../../Types/Quize";
+import { Options, Quiz } from "../../../Types/Quize";
 
 type Prop = {
   quizType: "QA" | "POLL" | "none";
@@ -18,19 +18,6 @@ type Prop = {
   state: "UPDATE" | "CREATE";
 };
 
-interface Options {
-  optionType: "Text" | "ImageUrl" | "TextImageUrl";
-  question: string;
-  options: Option[];
-  answer: number;
-  timer: 0 | 5 | 10;
-}
-
-interface Option {
-  text: string;
-  ImageUrl: string;
-}
-
 const QuestionAnswerForm = ({
   showSuccessModal,
   quizType,
@@ -41,11 +28,13 @@ const QuestionAnswerForm = ({
   state,
 }: Prop) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const { createQuiz } = useApiClient();
+  const { createQuiz, } = useApiClient();
 
   function setIndex(i: number) {
     setSelectedIndex((_) => i);
   }
+
+  console.log(questions,quizType,state)
 
   async function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,6 +43,7 @@ const QuestionAnswerForm = ({
       typeOfQuiz: quizType,
       questions: questions,
     };
+
     if (state == "CREATE") {
       await createQuiz(data);
     } else {

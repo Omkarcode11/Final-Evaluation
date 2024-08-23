@@ -101,7 +101,7 @@ exports.deleteQuizById = async (req, res) => {
 exports.getQuestions = async (req, res) => {
   try {
     let { id } = req.params;
-    let quiz = await Quiz.findById(id).select("questions author").populate({
+    let quiz = await Quiz.findById(id).select("questions author typeOfQuiz").populate({
       path: "questions",
       select: "optionType question options answer timer",
     });

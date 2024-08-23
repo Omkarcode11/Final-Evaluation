@@ -24,6 +24,7 @@ function QuizTable({}: Props) {
   let { getMyQuizzes, deleteQuiz } = useApiClient();
   let [showDelete, setShowDelete] = useState(false);
   let [showUpdate, setShowUpdate] = useState(false);
+  let [editQuizType, setEditQuizType] = useState<"QA" | "POLL">("QA");
 
   function onClose() {
     setShowDelete((_) => false);
@@ -35,16 +36,20 @@ function QuizTable({}: Props) {
     setSelectedId((_) => null);
   }
 
-  async function getAndSetQuestion(id:string) {
+  async function getAndSetQuestion(id: string) {
     // if (selectedId) {
-      let data = await getQuestion(id);
-      setQuestions(() => data);
+    let data = await getQuestion(id);
+    
+    if (data) {
+      setQuestions(() => data.questions);
       setShowUpdate((_) => true);
+      setEditQuizType(() => data.typeOfQuiz);
+    }
     // }/
   }
 
   async function openUpdateModal(id: string) {
-    console.log('edit click')
+    console.log("edit click");
     setSelectedId((_) => id);
     await getAndSetQuestion(id);
   }
@@ -106,7 +111,7 @@ function QuizTable({}: Props) {
             <QuestionAnswerForm
               onClose={closeUpdateModal}
               quizName=""
-              quizType="QA"
+              quizType={editQuizType}
               showSuccessModal={() => {}}
               questions={questions}
               setQuestions={setQuestions}

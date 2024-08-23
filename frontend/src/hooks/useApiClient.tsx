@@ -30,7 +30,7 @@ function useApiClient() {
   async function createQuiz(data: Quiz) {
     try {
       let res = await apiClient.post("/api/quiz", data);
-     
+
       if (res.status == 201) {
         return true;
       }
@@ -41,10 +41,10 @@ function useApiClient() {
     }
   }
 
-  async function getMyStats(){
+  async function getMyStats() {
     try {
       let res = await apiClient.get("/api/user/getstats");
-     
+
       if (res.status == 200) {
         return res.data.data;
       }
@@ -55,60 +55,76 @@ function useApiClient() {
     }
   }
 
-  async function getMyQuizzes(){
-     let data = await apiClient.get('/api/user/getmyquizzes')
-     if(data.status==200){
-        return data.data.quizzes
-     }
-     throw new Error("Not get my Quizzes")
+  async function getMyQuizzes() {
+    let data = await apiClient.get("/api/user/getmyquizzes");
+    if (data.status == 200) {
+      return data.data.quizzes;
+    }
+    throw new Error("Not get my Quizzes");
   }
 
-  async function getQuizDetail(id:string){
-    try{
-      let res = await apiClient.get(`/api/quiz/${id}`)
-      if(res.status==200){
-        return res.data
-      }else{
-        throw new Error("server error while getting the quizDetail")
+  async function getQuizDetail(id: string) {
+    try {
+      let res = await apiClient.get(`/api/quiz/${id}`);
+      if (res.status == 200) {
+        return res.data;
+      } else {
+        throw new Error("server error while getting the quizDetail");
       }
-
-    }catch(err){
-      if(err instanceof Error)
-      console.log(err.message)
-      else console.log(err)
+    } catch (err) {
+      if (err instanceof Error) console.log(err.message);
+      else console.log(err);
     }
   }
 
-  async function deleteQuiz(id:string){
-    try{
-      let res = await apiClient.delete(`/api/quiz/${id}`)
-      if(res.status==200){
-        return true
-      }else{
-        throw new Error("server error while getting the quizDetail")
+  async function deleteQuiz(id: string) {
+    try {
+      let res = await apiClient.delete(`/api/quiz/${id}`);
+      if (res.status == 200) {
+        return true;
+      } else {
+        throw new Error("server error while getting the quizDetail");
       }
-    }catch(err){
-      if(err instanceof Error)
-      console.log(err.message)
-      else console.log(err)
+    } catch (err) {
+      if (err instanceof Error) console.log(err.message);
+      else console.log(err);
     }
-    
   }
 
-  async function getQuestion(id:string){
-    try{
-      let res = await apiClient.get(`/api/quiz/questions/${id}`)
-      if(res.status==200){
-        return res.data.questions
-      }else{
-        throw new Error("server error while getting the quizDetail")
+  type getQuestionFnType = {
+      questions:Options[]
+      typeOfQuiz:'QA' | 'POLL'
+  }
+
+  async function getQuestion(id: string):Promise<getQuestionFnType | void> {
+    try {
+      let res = await apiClient.get(`/api/quiz/questions/${id}`);
+      if (res.status == 200) {
+        return {
+          questions: res.data.questions,
+          typeOfQuiz: res.data.typeOfQuiz,
+        };
+      } else {
+        throw new Error("server error while getting the quizDetail");
       }
-    }catch(err){
-      if(err instanceof Error)
-      console.log(err.message)
-      else console.log(err)
+    } catch (err) {
+      if (err instanceof Error) console.log(err.message);
+      else console.log(err);
     }
-    
+  }
+
+  async function updateQuestions(data: any, id: string) {
+    try {
+      let res = await apiClient.put(`/api/quiz/questions/${id}`);
+      if (res.status == 200) {
+        return res.data.questions;
+      } else {
+        throw new Error("server error while getting the quizDetail");
+      }
+    } catch (err) {
+      if (err instanceof Error) console.log(err.message);
+      else console.log(err);
+    }
   }
 
   return {
@@ -119,6 +135,7 @@ function useApiClient() {
     getMyQuizzes,
     getQuizDetail,
     deleteQuiz,
+    updateQuestions,
   };
 }
 

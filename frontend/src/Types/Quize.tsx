@@ -18,6 +18,7 @@ export interface  QuizName {
 
 
 export interface Options {
+  _id?:string,
   optionType: "Text" | "ImageUrl" | "TextImageUrl";
   question: string;
   options: Option[];
