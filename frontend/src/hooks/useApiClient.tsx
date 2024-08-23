@@ -115,7 +115,7 @@ function useApiClient() {
 
   async function updateQuestions(data: any, id: string) {
     try {
-      let res = await apiClient.put(`/api/quiz/questions/${id}`);
+      let res = await apiClient.put(`/api/quiz/questions/${id}`,{questions:data});
       if (res.status == 200) {
         return res.data.questions;
       } else {

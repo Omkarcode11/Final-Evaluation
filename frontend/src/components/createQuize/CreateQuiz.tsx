@@ -50,7 +50,7 @@ function CreateQuiz({}: Props) {
           <QuizTypeForm onClose={hide} setNameType={setQuizTypeName} />
         ) : (
           quiz?.typeOfQuiz!=undefined &&
-          <QuestionAnswerForm state="CREATE" quizType={quiz?.typeOfQuiz} quizName={quiz.quizName} onClose={hide} showSuccessModal={showSuccessfulModal} questions={questions} setQuestions={setQuestions}/>
+          <QuestionAnswerForm id='id' state="CREATE" quizType={quiz?.typeOfQuiz} quizName={quiz.quizName} onClose={hide} showSuccessModal={showSuccessfulModal} questions={questions} setQuestions={setQuestions}/>
         )}
       </Modal>
       <Modal onClose={hideSuccessfulModal} show={success}>

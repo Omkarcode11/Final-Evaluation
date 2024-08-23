@@ -3,7 +3,7 @@ import del from "./../../../assets/deleteIcon.svg";
 import { Option } from "../../../Types/Quize";
 
 type Props = {
-  quizType: "QA" | "POLL" | 'none';
+  quizType: "QA" | "POLL" | "none";
   options: Option[];
   optionType: "Text" | "ImageUrl" | "TextImageUrl";
   correctAnswer: number;
@@ -12,7 +12,7 @@ type Props = {
   appendText: (e: any, i: number) => void;
   appendImageUrl: (e: any, i: number) => void;
   selectCorrectOption: (i: number) => void;
-  state:'CREATE' | 'UPDATE'
+  state: "CREATE" | "UPDATE";
 };
 
 const OptionsContainer = ({
@@ -44,6 +44,7 @@ const OptionsContainer = ({
             <input
               required
               type="text"
+              readOnly={state == "UPDATE" && quizType== "QA" && correctAnswer === i}
               className={
                 quizType === "QA" && correctAnswer === i
                   ? `${styles.correctAnswer} ${styles.optionInput}`
@@ -58,6 +59,7 @@ const OptionsContainer = ({
             <input
               required
               type="url"
+              readOnly={state == "UPDATE" && quizType=="QA" && correctAnswer === i}
               className={
                 quizType === "QA" && correctAnswer === i
                   ? `${styles.correctAnswer} ${styles.optionInput}`
@@ -68,15 +70,15 @@ const OptionsContainer = ({
               value={ele.ImageUrl}
             />
           )}
-          {state=='CREATE' &&
-          <img src={del} onClick={() => deleteOption(i)} />
-          }
+          {state == "CREATE" && (
+            <img src={del} onClick={() => deleteOption(i)} />
+          )}
         </div>
       ))}
-      {options.length < 4 && state=='CREATE' && (
+      {options.length < 4 && state == "CREATE" && (
         <div className={styles.addOption} onClick={addOption}>
           <div> </div>
-          <div >Add Option</div>
+          <div>Add Option</div>
         </div>
       )}
     </div>

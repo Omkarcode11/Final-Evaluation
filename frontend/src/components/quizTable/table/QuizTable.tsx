@@ -106,9 +106,10 @@ function QuizTable({}: Props) {
             />
           ))}
         </table>
-        {showUpdate && (
+        {showUpdate && selectedId && (
           <Modal onClose={closeUpdateModal} show={showUpdate}>
             <QuestionAnswerForm
+              id={selectedId}
               onClose={closeUpdateModal}
               quizName=""
               quizType={editQuizType}

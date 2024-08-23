@@ -16,6 +16,7 @@ type Prop = {
   questions: Options[];
   setQuestions: Dispatch<React.SetStateAction<Options[]>>;
   state: "UPDATE" | "CREATE";
+  id: string;
 };
 
 const QuestionAnswerForm = ({
@@ -26,15 +27,16 @@ const QuestionAnswerForm = ({
   questions,
   setQuestions,
   state,
+  id,
 }: Prop) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const { createQuiz, } = useApiClient();
+  const { createQuiz, updateQuestions } = useApiClient();
 
   function setIndex(i: number) {
     setSelectedIndex((_) => i);
   }
 
-  console.log(questions,quizType,state)
+  console.log(questions, quizType, state);
 
   async function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,7 +49,7 @@ const QuestionAnswerForm = ({
     if (state == "CREATE") {
       await createQuiz(data);
     } else {
-      // await updateQuiz(data)
+      await updateQuestions(data.questions, id);
     }
     onClose();
     showSuccessModal();
