@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "../modal/Modal";
 import QuizTypeForm from "../form/quizTypeForm/QuizTypeForm";
 import QuestionAnswerForm from "../form/questionAnswerForm/QuestionAnswerForm";
-import { Options, Quiz, QuizName, quizNameType } from "../../Types/Quize";
+import { Options, Quiz, QuizName } from "../../Types/Quize";
 import SuccessCreateQuiz from "../success/SuccessCreateQuiz";
 
 type Props = {};

@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard/Dashboard'
 import Analytics from './components/analytics/Analytics'
 import CreateQuiz from './components/createQuize/CreateQuiz'
 import QuizAnalytics from './components/questionAnalytics/quizAnalytics/QuizAnalytics'
+import StartQuiz from './components/startQuiz/StartQuiz'
 
 function App() {
   let route = createBrowserRouter([
@@ -21,6 +22,8 @@ function App() {
       {path:'login',element:<Login/>,index:true},
       {path:'signup',element:<Signup/>},
     ]}
+    ,
+    {path:"/startQuiz/:quidId",element:<StartQuiz/>}
   ])
 
   return (

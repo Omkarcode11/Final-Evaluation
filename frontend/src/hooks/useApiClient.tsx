@@ -1,7 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constant";
 import { Options, Quiz } from "../Types/Quize";
-type Props = {};
 
 function useApiClient() {
   const apiClient = axios.create({
