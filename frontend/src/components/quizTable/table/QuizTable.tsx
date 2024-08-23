@@ -4,6 +4,8 @@ import classes from "./QuizeTable.module.css";
 import ConfirmDeleteModal from "../../delete/ConfirmDeleteModal";
 import Modal from "../../modal/Modal";
 import useApiClient from "../../../hooks/useApiClient";
+import QuestionAnswerForm from "../../form/questionAnswerForm/QuestionAnswerForm";
+import { Options } from "../../../Types/Quize";
 
 type Quizzes = {
   _id: string;
@@ -15,15 +17,36 @@ type Quizzes = {
 type Props = {};
 
 function QuizTable({}: Props) {
+  let { getQuestion } = useApiClient();
   let [quizzes, setQuizzes] = useState<Quizzes[]>([]);
+  let [questions, setQuestions] = useState<Options[]>([]);
   let [selectedId, setSelectedId] = useState<string | null>(null);
-
   let { getMyQuizzes, deleteQuiz } = useApiClient();
-
   let [showDelete, setShowDelete] = useState(false);
+  let [showUpdate, setShowUpdate] = useState(false);
 
   function onClose() {
     setShowDelete((_) => false);
+    setSelectedId((_) => null);
+  }
+
+  function closeUpdateModal() {
+    setShowUpdate((_) => false);
+    setSelectedId((_) => null);
+  }
+
+  async function getAndSetQuestion(id:string) {
+    // if (selectedId) {
+      let data = await getQuestion(id);
+      setQuestions(() => data);
+      setShowUpdate((_) => true);
+    // }/
+  }
+
+  async function openUpdateModal(id: string) {
+    console.log('edit click')
+    setSelectedId((_) => id);
+    await getAndSetQuestion(id);
   }
 
   function show(id: string) {
@@ -40,7 +63,7 @@ function QuizTable({}: Props) {
           let newQuizzes = [...prev];
           return newQuizzes.filter((ele) => ele._id != selectedId);
         });
-        setSelectedId(_=>null)
+        setSelectedId((_) => null);
       }
     }
   }
@@ -74,9 +97,23 @@ function QuizTable({}: Props) {
               impressions={String(ele.impression)}
               id={ele._id}
               quizName={ele.quizName}
+              openUpdate={openUpdateModal}
             />
           ))}
         </table>
+        {showUpdate && (
+          <Modal onClose={closeUpdateModal} show={showUpdate}>
+            <QuestionAnswerForm
+              onClose={closeUpdateModal}
+              quizName=""
+              quizType="QA"
+              showSuccessModal={() => {}}
+              questions={questions}
+              setQuestions={setQuestions}
+              state="UPDATE"
+            />
+          </Modal>
+        )}
         {showDelete && (
           <Modal onClose={onClose} show={showDelete}>
             <ConfirmDeleteModal

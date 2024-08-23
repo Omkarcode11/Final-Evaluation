@@ -33,3 +33,7 @@
 .link {
   color: black !important;
 }
+
+.edit{
+  cursor: pointer;
+}

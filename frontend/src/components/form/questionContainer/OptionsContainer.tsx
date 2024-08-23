@@ -12,6 +12,7 @@ type Props = {
   appendText: (e: any, i: number) => void;
   appendImageUrl: (e: any, i: number) => void;
   selectCorrectOption: (i: number) => void;
+  state:'CREATE' | 'UPDATE'
 };
 
 const OptionsContainer = ({
@@ -24,6 +25,7 @@ const OptionsContainer = ({
   appendText,
   appendImageUrl,
   selectCorrectOption,
+  state,
 }: Props) => (
   <div className={styles.optionsContainer}>
     <div className={styles.options}>
@@ -66,10 +68,12 @@ const OptionsContainer = ({
               value={ele.ImageUrl}
             />
           )}
+          {state=='CREATE' &&
           <img src={del} onClick={() => deleteOption(i)} />
+          }
         </div>
       ))}
-      {options.length < 4 && (
+      {options.length < 4 && state=='CREATE' && (
         <div className={styles.addOption} onClick={addOption}>
           <div> </div>
           <div >Add Option</div>

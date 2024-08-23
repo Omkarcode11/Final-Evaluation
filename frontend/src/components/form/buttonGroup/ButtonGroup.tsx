@@ -2,12 +2,13 @@ import styles from "./../questionAnswerForm/QuestionAnswerForm.module.css";
 
 type Props = {
   onClose: () => void;
+  state:'UPDATE' | 'CREATE'
 };
 
-const ButtonGroup = ({ onClose }: Props) => (
+const ButtonGroup = ({ state,onClose }: Props) => (
   <div className={styles.btnGroup}>
     <button onClick={onClose} className={styles.cancel}>Cancel</button>
-    <button className={styles.addQuestion}>Create</button>
+    <button className={styles.addQuestion}>{state}</button>
   </div>
 );
 

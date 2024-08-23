@@ -10,6 +10,7 @@ type Props = {
   setSelectedIndex: (index: number) => void;
   saveAndAddQuestionHandler: (e: FormEvent) => void;
   deleteQuestion: (index: number) => void;
+  state: "UPDATE" | 'CREATE'
 };
 
 const QuestionList = ({
@@ -18,6 +19,7 @@ const QuestionList = ({
   setSelectedIndex,
   saveAndAddQuestionHandler,
   deleteQuestion,
+  state
 }: Props) => (
   <div className={styles.allQuestions}>
     <div className={styles.pileContainer}>
@@ -30,7 +32,7 @@ const QuestionList = ({
               : `${i !== 0 && styles.questionNum}`
           }
         >
-          {i !== 0 && (
+          {i !== 0 && state=='CREATE' && (
             <img
               src={close}
               onClick={() => deleteQuestion(i)}
@@ -40,7 +42,7 @@ const QuestionList = ({
           {i + 1}
         </span>
       ))}
-      {questions.length < 5 && (
+      {questions.length < 5 && state=='CREATE' && (
         <button
           type="button"
           onClick={saveAndAddQuestionHandler}

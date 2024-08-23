@@ -1,8 +1,8 @@
 import styles from "./../questionAnswerForm/QuestionAnswerForm.module.css";
 
 type Props = {
-  selectedTimer: "OFF" | 5 | 10;
-  setTimer: (timer: "OFF" | 5 | 10) => void;
+  selectedTimer: 0 | 5 | 10;
+  setTimer: (timer: 0 | 5 | 10) => void;
 };
 
 const TimerSelector = ({ selectedTimer, setTimer }: Props) => (
@@ -10,14 +10,14 @@ const TimerSelector = ({ selectedTimer, setTimer }: Props) => (
     <div>Timer</div>
     <label
       className={
-        selectedTimer === "OFF"
+        selectedTimer === 0
           ? `${styles.timer} ${styles.active}`
           : `${styles.timer}`
       }
     >
       <input
         required
-        onClick={() => setTimer("OFF")}
+        onClick={() => setTimer(0)}
         className={styles.inputRadio}
         type="radio"
       />

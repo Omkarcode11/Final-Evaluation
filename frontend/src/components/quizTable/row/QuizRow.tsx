@@ -13,10 +13,12 @@ type Props = {
   impressions:string
   showDelete:(id:string)=>void
   id:string
+  openUpdate:(id:string)=>void
 }
 
-function QuizRow({createdOn,impressions,num,quizName,showDelete,id}: Props) {
+function QuizRow({createdOn,impressions,num,quizName,showDelete,id,openUpdate}: Props) {
   const [showToast, setShowToast] = useState(false);
+
 
   const handleShowToast = () => {
     setShowToast(true);
@@ -26,6 +28,10 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id}: Props) {
     setShowToast(false);
   };
 
+  function editHandler(){
+    openUpdate(id)
+  }
+
   return (
     <tr className={classes.row}>
     <td className={classes.radiusStart}>{num}</td>
@@ -33,8 +39,7 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id}: Props) {
     <td>{createdOn}</td>
     <td>{impressions}</td>
     <td className={classes.icon}>
-      <img src={edit}/>
-      
+      <img src={edit} onClick={editHandler}/>
       <img src={del} onClick={()=>showDelete(id)}/>
       <img src={share} onClick={handleShowToast}/>
     </td>
@@ -43,6 +48,10 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id}: Props) {
       Question Wise Analysis
       </Link>
     </td>
+
+
+
+
     {showToast && (
         <Toast message="Link copied to Clipboard" onClose={handleCloseToast} />
       )}

@@ -22,7 +22,7 @@ export interface Options {
   question: string;
   options: Option[];
   answer: number;
-  timer: "OFF" | 5 | 10;
+  timer: 0 | 5 | 10;
 }
 
 export interface Option {

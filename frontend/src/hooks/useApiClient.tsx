@@ -95,7 +95,24 @@ function useApiClient() {
     
   }
 
+  async function getQuestion(id:string){
+    try{
+      let res = await apiClient.get(`/api/quiz/questions/${id}`)
+      if(res.status==200){
+        return res.data.questions
+      }else{
+        throw new Error("server error while getting the quizDetail")
+      }
+    }catch(err){
+      if(err instanceof Error)
+      console.log(err.message)
+      else console.log(err)
+    }
+    
+  }
+
   return {
+    getQuestion,
     createQuiz,
     apiClient,
     getMyStats,

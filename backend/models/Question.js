@@ -21,7 +21,7 @@ const questionSchema = new mongoose.Schema(
       required: true,
     },
     options: [optionSchema],
-    poll: [{ type: Number, default: [0, 0, 0, 0] }],
+    poll: [{ type: Number, default: new Array(4).fill(0) }],
     impression: {
       type: Number,
       default: 0,
@@ -33,6 +33,7 @@ const questionSchema = new mongoose.Schema(
     answer: {
       type: Number,
       required: true,
+      immutable: true,
     },
     timer: {
       type: Number,
@@ -42,6 +43,7 @@ const questionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Quiz",
       required: true,
+      immutable: true,
     },
   },
   { timestamps: true }
