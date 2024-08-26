@@ -9,6 +9,7 @@ const {
   updateQuestions,
   getQuizByIdOpen,
   getResult,
+  increaseQuestionImpression,
 } = require("../controllers/quiz.controller");
 const { protect } = require("../middlewares/auth.route");
 
@@ -20,6 +21,7 @@ router.get("/questions/:id", protect, getQuestions);
 router.put("/questions/:id", protect, updateQuestions);
 
 router.get("/startQuiz/:id", getQuizByIdOpen);
+router.get("/increaseQuestionImpression/:id",increaseQuestionImpression)
 router.post("/getResult", getResult);
 
 module.exports = router;

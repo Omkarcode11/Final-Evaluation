@@ -3,181 +3,126 @@ import { Quiz } from "../../Types/Quize";
 import classes from "./StartQuiz.module.css";
 import OptionsGrid from "../optionsGrid/OptionsGrid";
 import QuizCompleteBanner from "../quizComplete/QuizCompleteBanner";
+import axios from "axios";
+import { BASE_URL } from "../../utils/constant";
+import { useParams } from "react-router-dom";
 
 function StartQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timer, setTimer] = useState(10);
+  const [score, setScore] = useState(0);
+  const [quiz, setQuiz] = useState<Quiz>({
+    questions: [],
+    quizName: "",
+    typeOfQuiz: "none",
+  });
   const timerId = useRef<number | null>(null);
-  const [selectedOptions,setSelectedOptions] = useState(new Array(4).fill(-1))
-  const quiz: Quiz = {
-    quizName: "omkar",
-    typeOfQuiz: "POLL",
-    questions: [
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 0,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 5,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 10,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 10,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 10,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      {
-        optionType: "TextImageUrl",
-        question: "What is React? How does it look like?",
-        timer: 10,
-        answer: 0,
-        options: [
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a library.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a framework.",
-          },
-          {
-            ImageUrl: "https://picsum.photos/seed/picsum/200/300",
-            text: "React is a language.",
-          },
-          { ImageUrl: "https://picsum.photos/seed/picsum/200/300", text: "" },
-        ],
-      },
-      // ... Other questions
-    ],
-  };
+  const params = useParams();
+  const [selectedOptions, setSelectedOptions] = useState<
+    { id: string; ans: number }[]
+  >(new Array());
 
-  function selectOptions(index:number){
-      setSelectedOptions(prev=>{
-        let newOptions = [...prev]
-        newOptions[currentQuestionIndex] = index
-        return newOptions
-      })
-  }
-
-  const nextQuestion = () => {
-    clearInterval(timerId.current!);
-    if (currentQuestionIndex < quiz.questions.length) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-    } else {
-      console.log("Quiz Complete. Submit the answers.");
+  const selectOptions = (index: number) => {
+    if (
+      quiz.questions.length &&
+      quiz.questions[currentQuestionIndex]._id != undefined
+    ) {
+      setSelectedOptions((prev) => {
+        const newOptions = [...prev];
+        newOptions[currentQuestionIndex] = {
+          ans: index,
+          id:
+            quiz.questions[currentQuestionIndex]._id != undefined
+              ? quiz.questions[currentQuestionIndex]._id
+              : "id",
+        };
+        return newOptions;
+      });
     }
   };
 
+  const nextQuestion = async () => {
+    if (quiz.questions[currentQuestionIndex]._id)
+      await incrementQuestionImpression(
+        quiz.questions[currentQuestionIndex]._id
+      );
+    clearInterval(timerId.current!);
+    if (currentQuestionIndex < quiz.questions.length - 1) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    } else {
+      await getResult();
+      console.log("Quiz Complete. Submit the answers.");
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  async function incrementQuestionImpression(id: string) {
+    let res = await axios.get(
+      `${BASE_URL}/api/quiz/increaseQuestionImpression/${id}`
+    );
+    if (res.status == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const fetchQuiz = async (id: string) => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/quiz/startQuiz/${id}`);
+      if (res.status === 200) {
+        setQuiz(res.data);
+        setSelectedOptions((_) =>
+          new Array(res.data.questions.length).fill(-1)
+        );
+      } else {
+        console.error("Failed to fetch the quiz");
+      }
+    } catch (error) {
+      console.error("Error fetching the quiz:", error);
+    }
+  };
+
+  async function getResult() {
+    let res = await axios.post(`${BASE_URL}/api/quiz/getResult`, {
+      answers: selectedOptions,
+    });
+    if (res.status == 200) {
+      setScore(res.data.score);
+    } else {
+      console.log("not getting score");
+    }
+  }
+
   useEffect(() => {
-    if (quiz.questions[currentQuestionIndex]) {
-      setTimer(quiz.questions[currentQuestionIndex].timer);
-      if (quiz.questions[currentQuestionIndex].timer != 0) {
-        timerId.current = setInterval(() => {
-          setTimer((prev) => prev - 1);
+    if (quiz.questions.length && quiz.questions[currentQuestionIndex]) {
+      clearInterval(timerId.current!);
+
+      const currentTimer = quiz.questions[currentQuestionIndex].timer;
+      setTimer(currentTimer);
+
+      if (currentTimer !== 0) {
+        timerId.current = window.setInterval(() => {
+          setTimer((prev) => {
+            if (prev > 1) {
+              return prev - 1;
+            } else {
+              nextQuestion();
+              return 0;
+            }
+          });
         }, 1000);
       }
     }
 
     return () => clearInterval(timerId.current!);
-  }, [currentQuestionIndex]);
+  }, [currentQuestionIndex, quiz.questions]);
 
   useEffect(() => {
-    if (quiz.questions[currentQuestionIndex].timer != 0 && timer <= 0) {
-      nextQuestion();
+    if (params.quidId) {
+      fetchQuiz(params.quidId);
     }
-  }, [timer]);
+  }, [params.quidId]);
 
   return (
     <div className={classes.container}>
@@ -188,25 +133,28 @@ function StartQuiz() {
               <div>
                 {currentQuestionIndex + 1}/{quiz.questions.length}
               </div>
-              {quiz.typeOfQuiz!='POLL' && quiz.questions[currentQuestionIndex].timer != 0 ? (
-                <div className={classes.timer}>
-                  00:{String(timer).padStart(2, "0")}s
-                </div>
-              ) : (
-                <div></div>
-              )}
+              {quiz.typeOfQuiz !== "POLL" &&
+                quiz.questions[currentQuestionIndex].timer !== 0 && (
+                  <div className={classes.timer}>
+                    00:{String(timer).padStart(2, "0")}s
+                  </div>
+                )}
             </header>
             <div className={classes.question}>
               {quiz.questions[currentQuestionIndex].question}
             </div>
             <div className={classes.options}>
               <OptionsGrid
-              selectOptions={selectOptions}
+                selectOptions={selectOptions}
                 content={quiz.questions[currentQuestionIndex].options}
               />
             </div>
             <div className={classes.btnGroup}>
-              <button disabled={selectedOptions[currentQuestionIndex]==-1} className={classes.nextBtn} onClick={nextQuestion}>
+              <button
+                disabled={selectedOptions[currentQuestionIndex].ans === -1}
+                className={classes.nextBtn}
+                onClick={nextQuestion}
+              >
                 {currentQuestionIndex === quiz.questions.length - 1
                   ? "Complete"
                   : "Next"}
@@ -214,11 +162,11 @@ function StartQuiz() {
             </div>
           </>
         ) : (
-          quiz.typeOfQuiz != "none" && (
+          quiz.typeOfQuiz !== "none" && (
             <QuizCompleteBanner
               total={quiz.questions.length}
               type={quiz.typeOfQuiz}
-              score={1}
+              score={score} // Calculate the score based on selectedOptions
             />
           )
         )}

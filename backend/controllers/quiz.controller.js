@@ -198,7 +198,7 @@ exports.getQuizByIdOpen = async (req, res) => {
   }
 };
 
-exports.increaseQuestion = async (req, res) => {
+exports.increaseQuestionImpression = async (req, res) => {
   try {
     let { id } = req.params;
 
@@ -227,7 +227,7 @@ exports.getResult = async (req, res) => {
 
     for (let ans of answers) {
       let question = await Question.findById(ans.id);
-      if (question.answer == ans.answer) {
+      if (question.answer == ans.ans) {
         question.correctImpression += 1;
         score++;
       }
