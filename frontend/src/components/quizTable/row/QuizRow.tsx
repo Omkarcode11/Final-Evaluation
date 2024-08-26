@@ -1,10 +1,10 @@
 import edit from './../../../assets/edit.svg';
 import del from './../../../assets/deleteIcon.svg';
-import share from './../../../assets/share.svg';
 import classes from './QuizeRow.module.css'
 import { Link } from 'react-router-dom';
 import Toast from '../../toast/Toast';
 import { useState } from 'react';
+import CopyButton from '../../copybtn/CopyButton';
 
 type Props = {
   num:number,
@@ -41,7 +41,7 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id,openUpdate}: 
     <td className={classes.icon}>
       <img src={edit} onClick={editHandler}/>
       <img src={del} onClick={()=>showDelete(id)}/>
-      <img src={share} onClick={handleShowToast}/>
+      <CopyButton showToast={handleShowToast} id={id} />
     </td>
     <td className={classes.radiusEnd}>
       <Link to={`quiz/${id}`} className={classes.link}>

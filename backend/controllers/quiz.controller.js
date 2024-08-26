@@ -9,8 +9,7 @@ exports.createQuiz = async (req, res) => {
     const { quizName, typeOfQuiz, questions } = req.body;
     let allQuestion = [];
 
-    if(typeOfQuiz=='POLL'){
-
+    if (typeOfQuiz == "POLL") {
     }
 
     const quiz = await Quiz.create({
@@ -101,10 +100,12 @@ exports.deleteQuizById = async (req, res) => {
 exports.getQuestions = async (req, res) => {
   try {
     let { id } = req.params;
-    let quiz = await Quiz.findById(id).select("questions author typeOfQuiz").populate({
-      path: "questions",
-      select: "optionType question options answer timer",
-    });
+    let quiz = await Quiz.findById(id)
+      .select("questions author typeOfQuiz")
+      .populate({
+        path: "questions",
+        select: "optionType question options answer timer",
+      });
 
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
@@ -155,12 +156,88 @@ exports.updateQuestions = async (req, res) => {
       );
 
       if (!updatedQuestion) {
-        return res.status(500).json({ message: "Failed to update the questions" });
+        return res
+          .status(500)
+          .json({ message: "Failed to update the questions" });
       }
     }
 
     return res.status(200).json({ message: "Questions updated successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Server error", error: error.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+};
+
+exports.getQuizByIdOpen = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    let quiz = await Quiz.findById(id)
+      .populate({
+        path: "questions",
+        select: "_id optionType question options timer",
+      })
+      .select("quizName typeOfQuiz questions impression");
+
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    quiz.impression += 1;
+    await quiz.save();
+
+    for (let question of quiz.questions) {
+    }
+
+    return res.status(200).json(quiz);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.increaseQuestion = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    let question = await Question.findByIdAndUpdate(
+      id,
+      { $inc: { impression: 1 } },
+      { new: true }
+    );
+
+    if (!question) {
+      return res.status(404).json({ message: "Question not found" });
+    }
+
+    return res.status(200).json({ message: "Success", question });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+};
+
+exports.getResult = async (req, res) => {
+  try {
+    let { answers } = req.body;
+    let score = 0;
+
+    for (let ans of answers) {
+      let question = await Question.findById(ans.id);
+      if (question.answer == ans.answer) {
+        question.correctImpression += 1;
+        score++;
+      }
+      question.impression += 1;
+      await question.save();
+    }
+    return res.status(200).json({ score });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
   }
 };

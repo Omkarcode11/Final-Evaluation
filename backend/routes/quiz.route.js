@@ -7,6 +7,8 @@ const {
   getQuestions,
   updateQuiz,
   updateQuestions,
+  getQuizByIdOpen,
+  getResult,
 } = require("../controllers/quiz.controller");
 const { protect } = require("../middlewares/auth.route");
 
@@ -16,5 +18,8 @@ router.delete("/:id", protect, deleteQuizById);
 
 router.get("/questions/:id", protect, getQuestions);
 router.put("/questions/:id", protect, updateQuestions);
+
+router.get("/startQuiz/:id", getQuizByIdOpen);
+router.post("/getResult", getResult);
 
 module.exports = router;
