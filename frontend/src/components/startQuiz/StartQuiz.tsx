@@ -86,6 +86,7 @@ function StartQuiz() {
   async function getResult() {
     let res = await axios.post(`${BASE_URL}/api/quiz/getResult`, {
       answers: selectedOptions,
+      typeOfQuiz: quiz.typeOfQuiz,
     });
     if (res.status == 200) {
       setScore(res.data.score);

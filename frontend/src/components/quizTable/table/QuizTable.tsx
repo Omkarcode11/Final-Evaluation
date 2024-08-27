@@ -6,6 +6,7 @@ import Modal from "../../modal/Modal";
 import useApiClient from "../../../hooks/useApiClient";
 import QuestionAnswerForm from "../../form/questionAnswerForm/QuestionAnswerForm";
 import { Options } from "../../../Types/Quize";
+import { formatDate } from "../../../utils/formate";
 
 type Quizzes = {
   _id: string;
@@ -39,7 +40,7 @@ function QuizTable({}: Props) {
   async function getAndSetQuestion(id: string) {
     // if (selectedId) {
     let data = await getQuestion(id);
-    
+
     if (data) {
       setQuestions(() => data.questions);
       setShowUpdate((_) => true);
@@ -98,8 +99,8 @@ function QuizTable({}: Props) {
             <QuizRow
               showDelete={show}
               num={i + 1}
-              createdOn={new Date(ele.createdAt).toLocaleDateString()}
-              impressions={String(ele.impression)}
+              createdOn={formatDate(ele.createdAt)}
+              impressions={ele.impression}
               id={ele._id}
               quizName={ele.quizName}
               openUpdate={openUpdateModal}

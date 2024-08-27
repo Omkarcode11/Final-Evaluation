@@ -9,9 +9,6 @@ exports.createQuiz = async (req, res) => {
     const { quizName, typeOfQuiz, questions } = req.body;
     let allQuestion = [];
 
-    if (typeOfQuiz == "POLL") {
-    }
-
     const quiz = await Quiz.create({
       quizName,
       typeOfQuiz,
@@ -21,6 +18,8 @@ exports.createQuiz = async (req, res) => {
 
     for (let question of questions) {
       question.quizId = quiz.id;
+      if (quiz.typeOfQuiz == "POLL")
+        question.poll = new Array(question.options.length).fill(0);
       let ques = await Question.create(question);
       allQuestion.push(ques.id);
     }
@@ -177,7 +176,7 @@ exports.getQuizByIdOpen = async (req, res) => {
     let quiz = await Quiz.findById(id)
       .populate({
         path: "questions",
-        select: "_id optionType question options timer",
+        select: "_id optionType question poll options timer",
       })
       .select("quizName typeOfQuiz questions impression");
 
@@ -187,9 +186,6 @@ exports.getQuizByIdOpen = async (req, res) => {
 
     quiz.impression += 1;
     await quiz.save();
-
-    for (let question of quiz.questions) {
-    }
 
     return res.status(200).json(quiz);
   } catch (err) {
@@ -222,14 +218,20 @@ exports.increaseQuestionImpression = async (req, res) => {
 
 exports.getResult = async (req, res) => {
   try {
-    let { answers } = req.body;
+    let { answers, typeOfQuiz } = req.body;
     let score = 0;
 
-    for (let ans of answers) {
+  for (let ans of answers) {
       let question = await Question.findById(ans.id);
-      if (question.answer == ans.ans) {
+      if (typeOfQuiz == "QA" && question.answer == ans.ans) {
         question.correctImpression += 1;
         score++;
+      } else if (typeOfQuiz == "POLL") {
+        if (!question.poll[ans.ans]) {
+          question.poll[ans.ans] = 1;
+        } else {
+          question.poll[ans.ans] += 1;
+        }
       }
       await question.save();
     }

@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 import Toast from '../../toast/Toast';
 import { useState } from 'react';
 import CopyButton from '../../copybtn/CopyButton';
+import { formatNumber } from '../../../utils/formate';
 
 type Props = {
   num:number,
   quizName:string,
   createdOn:string,
-  impressions:string
+  impressions:number
   showDelete:(id:string)=>void
   id:string
   openUpdate:(id:string)=>void
@@ -37,7 +38,7 @@ function QuizRow({createdOn,impressions,num,quizName,showDelete,id,openUpdate}: 
     <td className={classes.radiusStart}>{num}</td>
     <td>{quizName.substring(0,15)}{quizName.length>15 && '...'}</td>
     <td>{createdOn}</td>
-    <td>{impressions}</td>
+    <td>{formatNumber(impressions)}</td>
     <td className={classes.icon}>
       <img src={edit} onClick={editHandler}/>
       <img src={del} onClick={()=>showDelete(id)}/>

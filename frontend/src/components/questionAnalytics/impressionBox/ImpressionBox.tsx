@@ -9,7 +9,7 @@ function ImpressionBox({impression,text}: Props) {
   return (
     <div className={classes.container}>
        <h2>{impression}</h2>
-       <p>people Attempted {text}</p>
+       <p>{text}</p>
     </div>
   )
 }
