@@ -126,7 +126,17 @@ function useApiClient() {
     }
   }
 
+  async function getTrendingQuiz(){
+    let res = await apiClient.get('/api/user/getTrendingQuiz')
+    if(res.status==200){
+      return res.data.quizzes
+    }else {
+      throw new Error('server error while getting the quizDetail')
+    }
+  }
+
   return {
+    getTrendingQuiz,
     getQuestion,
     createQuiz,
     apiClient,

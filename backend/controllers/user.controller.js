@@ -33,10 +33,11 @@ exports.getTrendingQuiz = async (req, res) => {
     let quizzes = await User.findById(id)
       .populate({
         path: "quizzes",
+        select:"quizName impression createdAt",
         match: { impression: { $gt: 10 } }, // Filters quizzes with impression greater than 10
         options: { sort: { createdAt: 1 } }, // Sorts by createdAt in ascending order
       })
-      .select("quizName impression createdAt");
+      .select("username");
 
     return res.status(200).json(quizzes);
   } catch (err) {

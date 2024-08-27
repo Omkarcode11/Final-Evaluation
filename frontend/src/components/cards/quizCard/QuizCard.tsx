@@ -19,7 +19,7 @@ function QuizCard({name,createdAt,views}: Props) {
         </div>
         </div>
         <div className={classes.createdAt}>
-         created on : {createdAt}
+         created on : {new Date(createdAt).toLocaleDateString()}
         </div>
     </div>
   )

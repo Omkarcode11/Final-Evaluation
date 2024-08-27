@@ -231,7 +231,6 @@ exports.getResult = async (req, res) => {
         question.correctImpression += 1;
         score++;
       }
-      question.impression += 1;
       await question.save();
     }
     return res.status(200).json({ score });
