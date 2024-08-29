@@ -1,5 +1,5 @@
 import React, { useState, HTMLAttributes } from "react";
-import { BASE_URL, CURRENT_URL } from "../../utils/constant";
+import { CURRENT_URL } from "../../utils/constant";
 import shareSVG from "./../../assets/share.svg";
 import copiedSVG from "./../../assets/tick.svg";
 

@@ -1,4 +1,3 @@
-/* SignupForm.module.css */
 .form {
     display: flex;
     flex-flow: column wrap;
@@ -45,6 +44,8 @@
   }
   
   .submitButton {
+    display: flex;
+    justify-content: center;
     width: 50%;
     padding: 10px;
     background-color: #8080ff;

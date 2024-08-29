@@ -13,7 +13,6 @@ type Props = {
 
 function QuestionAnalytics({
   No,
-  _id,
   correctImpression,
   impression,
   poll,

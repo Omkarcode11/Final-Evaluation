@@ -1,6 +1,6 @@
-import { FormEvent, MutableRefObject, Ref, useRef, useState } from 'react'
+import { FormEvent,  useRef, useState } from 'react'
 import classes from './QuizTypeForm.module.css'
-import { Quiz, QuizName, quizNameType } from '../../../Types/Quize'
+import {  QuizName } from '../../../Types/Quize'
 
 type Props = {
   onClose:()=>void
