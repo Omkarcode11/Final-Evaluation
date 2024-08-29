@@ -120,6 +120,7 @@ function QuizTable({}: Props) {
         {showUpdate && selectedId && (
           <Modal onClose={closeUpdateModal} show={showUpdate}>
             <QuestionAnswerForm
+              setGeneratedLink={(id:string)=>{id}}
               id={selectedId}
               onClose={closeUpdateModal}
               quizName=""
