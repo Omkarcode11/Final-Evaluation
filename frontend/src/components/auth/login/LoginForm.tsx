@@ -75,10 +75,17 @@ const LoginForm: React.FC = () => {
           navigate("/dashboard");
         }
       } catch (error) {
-        setErrors({
-          general:
-            error.response?.data?.message || "Something went wrong. Please try again.",
-        });
+        if (axios.isAxiosError(error)) {
+          setErrors({
+            general:
+              error.response?.data?.message ||
+              "Something went wrong. Please try again.",
+          });
+        } else {
+          setErrors({
+            general: "Something went wrong. Please try again.",
+          });
+        }
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +94,9 @@ const LoginForm: React.FC = () => {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      {errors.general && <div className={styles.errorText}>{errors.general}</div>}
+      {errors.general && (
+        <div className={styles.errorText}>{errors.general}</div>
+      )}
 
       <div className={styles.formGroup}>
         <label>Email</label>
@@ -115,10 +124,17 @@ const LoginForm: React.FC = () => {
         <div className={styles.errorText}>{errors.password}</div>
       )}
 
-      <button type="submit" className={styles.submitButton} disabled={isLoading}>
-        {isLoading ? <Spinner  borderWidth="2px" color="white" size="1.5rem"/> : "Login"}
+      <button
+        type="submit"
+        className={styles.submitButton}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <Spinner borderWidth="2px" color="white" size="1.5rem" />
+        ) : (
+          "Login"
+        )}
       </button>
-    
     </form>
   );
 };
