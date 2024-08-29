@@ -1,5 +1,4 @@
 import React, { Dispatch, FormEvent, useState } from "react";
-import styles from "./questionAnswerForm.module.css";
 import QuestionList from "../questionList/QuestionList";
 import QuestionTypeSelector from "../questionTypeSelector/QuestionTypeSelector";
 import OptionsContainer from "../questionContainer/OptionsContainer";
@@ -7,6 +6,7 @@ import TimerSelector from "../timerSelector/TimerSelector";
 import ButtonGroup from "../buttonGroup/ButtonGroup";
 import useApiClient from "../../../hooks/useApiClient";
 import { Options, Quiz } from "../../../Types/Quize";
+import classes from "./QuestionAnswerForm.module.css";
 
 type Prop = {
   quizType: "QA" | "POLL" | "none";
@@ -109,7 +109,7 @@ const QuestionAnswerForm = ({
   }
 
   return (
-    <form className={styles.container} onSubmit={submitHandler}>
+    <form className={classes.container} onSubmit={submitHandler}>
       <QuestionList
         state={state}
         questions={questions}
@@ -121,7 +121,7 @@ const QuestionAnswerForm = ({
       <input
         required
         type="text"
-        className={styles.pollInput}
+        className={classes.pollInput}
         placeholder="Poll Question"
         value={questions[selectedIndex]?.question}
         onChange={(e) =>
@@ -139,7 +139,7 @@ const QuestionAnswerForm = ({
           setOptionType={setOptionType}
         />
       )}
-      <div className={styles.optionsContainer}>
+      <div className={classes.optionsContainer}>
         <OptionsContainer
           state={state}
           quizType={quizType}
