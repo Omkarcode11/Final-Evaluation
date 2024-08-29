@@ -8,9 +8,11 @@ type Props = {
 
 function AuthPage({}: Props) {
   return (
+    <div className={classes.authPage}>
     <div className={classes.container }>
       <AuthNavigation/>
       <Outlet/>
+    </div>
     </div>
   )
 }

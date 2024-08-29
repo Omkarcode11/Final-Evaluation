@@ -3,7 +3,7 @@ import useApiClient from "../../hooks/useApiClient";
 import QuizCard from "../cards/quizCard/QuizCard";
 import TrendingQuizeCard from "../cards/trendingQuizCards/TrendingQuizeCard";
 import classes from "./Dashboard.module.css";
-import TrendingQuizWireFrame from "../wireframe/TrendingQuizWireFrame";
+import TrendingQuizWireFrame from "../shimmer/trendingQuiz/TrendingQuizWireFrame";
 
 type Trending = {
   quizName: string,

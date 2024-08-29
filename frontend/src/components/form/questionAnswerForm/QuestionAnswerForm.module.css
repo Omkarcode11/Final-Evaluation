@@ -37,7 +37,7 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
 }
 
-.addQuiz{
+.addQuiz {
   border: none;
   background-color: transparent;
 }
@@ -48,7 +48,7 @@
   font-size: 1.5rem;
 }
 
-.optionType>label {
+.optionType > label {
   width: fit-content;
   padding: 0rem 1rem;
 }
@@ -60,15 +60,14 @@
   margin-bottom: 10px;
 }
 
-.options{
+.options {
   display: flex;
   flex-direction: column;
   width: 70%;
   gap: 1rem;
-
 }
 
-.option{
+.option {
   padding: 0.1rem;
   display: flex;
   gap: 1rem;
@@ -81,7 +80,7 @@
   font-size: 1rem;
 }
 
-.optionInput{
+.optionInput {
   border: none;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1rem;
@@ -105,9 +104,7 @@
   font-size: 1rem;
   text-align: center;
   width: 8rem;
-  
 }
-
 
 .createQuiz {
   background-color: #52c41a;
@@ -118,19 +115,17 @@
   cursor: pointer;
 }
 
-
-
-.timerContainer{
+.timerContainer {
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.timer{
+.timer {
   display: flex;
   justify-content: center;
-  
+
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1.5rem;
   background-color: #ffffff;
@@ -139,16 +134,15 @@
   width: 5rem;
 }
 
-.btnGroup{
+.btnGroup {
   display: flex;
   justify-content: space-between;
 }
 
-
 .addQuestion {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1.5rem;
-  background-color: #60B84B;
+  background-color: #60b84b;
   border-radius: 0.5rem;
   font-size: 1rem;
   width: 40%;
@@ -159,37 +153,42 @@
 .cancel {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1.5rem;
-  border:none;
+  border: none;
   background-color: #ffffff;
   border-radius: 0.5rem;
   font-size: 1rem;
   width: 40%;
 }
 
-.active{
-  background-color: #D60000;
+.active {
+  background-color: #d60000;
   color: white;
 }
 
-.border{
+.border {
   background-color: #52c41a !important;
   color: white;
 }
 
-.questionNum{
+.questionNum {
   position: relative;
 }
 
-.close{
-  position:absolute;
+.close {
+  position: absolute;
   right: 0.1rem;
   top: 0.1rem;
-   width: 0.5rem;
-   height: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
 }
 
-
-.correctAnswer{
+.correctAnswer {
   background-color: #52c41a;
   color: white;
+}
+
+.spinner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

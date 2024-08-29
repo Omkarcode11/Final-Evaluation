@@ -7,6 +7,7 @@ import useApiClient from "../../../hooks/useApiClient";
 import QuestionAnswerForm from "../../form/questionAnswerForm/QuestionAnswerForm";
 import { Options } from "../../../Types/Quize";
 import { formatDate } from "../../../utils/formate";
+import ShimmerTable from "../../shimmer/quizTable/ShimmerTable";
 
 type Quizzes = {
   _id: string;
@@ -19,6 +20,7 @@ type Props = {};
 
 function QuizTable({}: Props) {
   let { getQuestion } = useApiClient();
+  let [loading, setLoading] = useState(false);
   let [quizzes, setQuizzes] = useState<Quizzes[]>([]);
   let [questions, setQuestions] = useState<Options[]>([]);
   let [selectedId, setSelectedId] = useState<string | null>(null);
@@ -46,7 +48,7 @@ function QuizTable({}: Props) {
       setShowUpdate((_) => true);
       setEditQuizType(() => data.typeOfQuiz);
     }
-    // }/
+ 
   }
 
   async function openUpdateModal(id: string) {
@@ -77,36 +79,44 @@ function QuizTable({}: Props) {
   async function getAndSetQuizzes() {
     let data = await getMyQuizzes();
     setQuizzes((_) => data);
+    setLoading((_) => false);
   }
 
   useEffect(() => {
+    setLoading((_) => true);
     getAndSetQuizzes();
   }, []);
-
+  console.log(loading);
   return (
     <>
       <div className={classes.container}>
-        <table className={classes.tableContainer}>
-          <tr className={classes.headers}>
-            <th className={classes.radiusStart}>S.No</th>
-            <th>Quiz Name</th>
-            <th>Created On</th>
-            <th>Impression</th>
-            <th></th>
-            <th className={classes.radiusEnd}></th>
-          </tr>
-          {quizzes.map((ele, i) => (
-            <QuizRow
-              showDelete={show}
-              num={i + 1}
-              createdOn={formatDate(ele.createdAt)}
-              impressions={ele.impression}
-              id={ele._id}
-              quizName={ele.quizName}
-              openUpdate={openUpdateModal}
-            />
-          ))}
-        </table>
+        {!loading ? (
+          <div>
+            <table className={classes.tableContainer}>
+              <tr className={classes.headers}>
+                <th className={classes.radiusStart}>S.No</th>
+                <th>Quiz Name</th>
+                <th>Created On</th>
+                <th>Impression</th>
+                <th></th>
+                <th className={classes.radiusEnd}></th>
+              </tr>
+              {quizzes.map((ele, i) => (
+                <QuizRow
+                  showDelete={show}
+                  num={i + 1}
+                  createdOn={formatDate(ele.createdAt)}
+                  impressions={ele.impression}
+                  id={ele._id}
+                  quizName={ele.quizName}
+                  openUpdate={openUpdateModal}
+                />
+              ))}
+            </table>
+          </div>
+        ) : (
+          <ShimmerTable columns={1} rows={10} />
+        )}
         {showUpdate && selectedId && (
           <Modal onClose={closeUpdateModal} show={showUpdate}>
             <QuestionAnswerForm

@@ -3,13 +3,15 @@ import close from './../../assets/close.svg'
 import { useState } from 'react';
 import Toast from '../toast/Toast';
 type Props = {
-    onClose:()=>void
+    onClose:()=>void;
+    link:string;
 }
 
-function SuccessCreateQuiz({onClose}: Props) {
+function SuccessCreateQuiz({onClose,link}: Props) {
   const [showToast, setShowToast] = useState(false);
 
-  const handleShowToast = () => {
+  const handleShowToast = async() => {
+    await navigator.clipboard.writeText(link);
     setShowToast(true);
   };
 
@@ -20,7 +22,7 @@ function SuccessCreateQuiz({onClose}: Props) {
   return (
     <div className={classes.successContainer}>
     <h1 className={classes.header} >Congrats your Quiz is Published!</h1>
-    <div className={classes.link}>your link is here </div>
+    <div className={classes.link}>{link}</div>
     <button type='button' onClick={handleShowToast} className={classes.sharebtn}>Share</button>
     <div className={classes.close} onClick={onClose}>
     <img src={close}/>

@@ -9,6 +9,7 @@ import { Options, Quiz } from "../../../Types/Quize";
 import classes from "./QuestionAnswerForm.module.css";
 
 type Prop = {
+  setGeneratedLink: (str: string) => void;
   quizType: "QA" | "POLL" | "none";
   quizName: string;
   onClose: () => void;
@@ -20,6 +21,7 @@ type Prop = {
 };
 
 const QuestionAnswerForm = ({
+  setGeneratedLink,
   showSuccessModal,
   quizType,
   quizName,
@@ -30,13 +32,11 @@ const QuestionAnswerForm = ({
   id,
 }: Prop) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const { createQuiz, updateQuestions } = useApiClient();
+  const { createQuiz, updateQuestions, loading } = useApiClient();
 
   function setIndex(i: number) {
     setSelectedIndex((_) => i);
   }
-
-  console.log(questions, quizType, state);
 
   async function submitHandler(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,7 +47,8 @@ const QuestionAnswerForm = ({
     };
 
     if (state == "CREATE") {
-      await createQuiz(data);
+      let res = await createQuiz(data);
+      setGeneratedLink(res._id);
     } else {
       await updateQuestions(data.questions, id);
     }
@@ -186,7 +187,7 @@ const QuestionAnswerForm = ({
           />
         )}
       </div>
-      <ButtonGroup state={state} onClose={onClose} />
+      <ButtonGroup state={state} onClose={onClose} loading={loading} />
     </form>
   );
 };

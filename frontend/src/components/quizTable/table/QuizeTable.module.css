@@ -5,6 +5,7 @@
 }
 .container {
   height: 34rem;
+  width: 60%;
   overflow-y: scroll;
 }
 

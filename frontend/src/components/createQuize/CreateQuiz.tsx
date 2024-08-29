@@ -4,12 +4,14 @@ import QuizTypeForm from "../form/quizTypeForm/QuizTypeForm";
 import QuestionAnswerForm from "../form/questionAnswerForm/QuestionAnswerForm";
 import { Options, Quiz, QuizName } from "../../Types/Quize";
 import SuccessCreateQuiz from "../success/SuccessCreateQuiz";
+import { CURRENT_URL } from "../../utils/constant";
 
 type Props = {};
 
 function CreateQuiz({}: Props) {
   const [show, setShow] = useState(true);
   const [quiz, setQuiz] = useState<QuizName>({quizName:"",typeOfQuiz:"none"}); // Ensures quiz can be null initially
+  const [link,setLink] = useState<string>('')
   const [questions, setQuestions] = useState<Options[]>([
     {
       question: "",
@@ -43,6 +45,12 @@ function CreateQuiz({}: Props) {
     setStep(false);
   }
 
+  function setGeneratedLink(id:string){
+           setLink(_=>`${CURRENT_URL}/startQuiz/${id}`)
+  }
+
+
+
   return (
     <div>
       <Modal onClose={hide} show={show}>
@@ -50,11 +58,11 @@ function CreateQuiz({}: Props) {
           <QuizTypeForm onClose={hide} setNameType={setQuizTypeName} />
         ) : (
           quiz?.typeOfQuiz!=undefined &&
-          <QuestionAnswerForm id='id' state="CREATE" quizType={quiz?.typeOfQuiz} quizName={quiz.quizName} onClose={hide} showSuccessModal={showSuccessfulModal} questions={questions} setQuestions={setQuestions}/>
+          <QuestionAnswerForm id='id'  state="CREATE" setGeneratedLink={setGeneratedLink} quizType={quiz?.typeOfQuiz} quizName={quiz.quizName} onClose={hide} showSuccessModal={showSuccessfulModal} questions={questions} setQuestions={setQuestions}/>
         )}
       </Modal>
       <Modal onClose={hideSuccessfulModal} show={success}>
-        <SuccessCreateQuiz onClose={hideSuccessfulModal}/>
+        <SuccessCreateQuiz onClose={hideSuccessfulModal} link={link}/>
       </Modal>
     </div>
   );

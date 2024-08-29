@@ -48,26 +48,26 @@ function useApiClient() {
   async function createQuiz(data: Quiz) {
     if (!validateQuiz(data)) return false;
 
-    setLoading(true);
+    setLoading((_) => true);
     setError(null);
 
     try {
       const res = await apiClient.post("/api/quiz", data);
       if (res.status === 201) {
-        return true;
+        return res.data;
       }
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
 
     return false;
   }
 
   async function getMyStats() {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError((_) => null);
 
     try {
       const res = await apiClient.get("/api/user/getstats");
@@ -77,15 +77,15 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
 
     return false;
   }
 
   async function getMyQuizzes() {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError((_) => null);
 
     try {
       const res = await apiClient.get("/api/user/getmyquizzes");
@@ -95,15 +95,15 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
 
     throw new Error("Failed to retrieve quizzes");
   }
 
   async function getQuizDetail(id: string) {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError(_=>null);
 
     try {
       const res = await apiClient.get(`/api/quiz/${id}`);
@@ -115,13 +115,13 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
   }
 
   async function deleteQuiz(id: string) {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError((_) => null);
 
     try {
       const res = await apiClient.delete(`/api/quiz/${id}`);
@@ -133,7 +133,7 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
 
     return false;
@@ -145,8 +145,8 @@ function useApiClient() {
   };
 
   async function getQuestion(id: string): Promise<getQuestionFnType | void> {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError((_) => null);
 
     try {
       const res = await apiClient.get(`/api/quiz/questions/${id}`);
@@ -161,7 +161,7 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
   }
 
@@ -171,8 +171,8 @@ function useApiClient() {
       return false;
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError(_=>null);
 
     try {
       const res = await apiClient.put(`/api/quiz/questions/${id}`, {
@@ -186,13 +186,13 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
   }
 
   async function getTrendingQuiz() {
-    setLoading(true);
-    setError(null);
+    setLoading((_) => true);
+    setError((_) => null);
 
     try {
       const res = await apiClient.get("/api/user/getTrendingQuiz");
@@ -204,7 +204,7 @@ function useApiClient() {
     } catch (err) {
       handleError(err);
     } finally {
-      setLoading(false);
+      setLoading((_) => false);
     }
   }
 
