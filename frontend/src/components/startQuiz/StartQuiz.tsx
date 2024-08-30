@@ -6,6 +6,7 @@ import QuizCompleteBanner from "../quizComplete/QuizCompleteBanner";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constant";
 import { useParams } from "react-router-dom";
+import Spinner from "../spinner/Spinner";
 
 function StartQuiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -18,6 +19,7 @@ function StartQuiz() {
   });
   const timerId = useRef<number | null>(null);
   const params = useParams();
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedOptions, setSelectedOptions] = useState<
     { id: string; ans: number }[]
   >(new Array());
@@ -42,6 +44,7 @@ function StartQuiz() {
   };
 
   const nextQuestion = async () => {
+    setLoading((_) => true);
     if (quiz.questions[currentQuestionIndex]._id)
       await incrementQuestionImpression(
         quiz.questions[currentQuestionIndex]._id
@@ -54,6 +57,7 @@ function StartQuiz() {
       console.log("Quiz Complete. Submit the answers.");
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     }
+    setLoading((_) => false);
   };
 
   async function incrementQuestionImpression(id: string) {
@@ -73,7 +77,10 @@ function StartQuiz() {
       if (res.status === 200) {
         setQuiz(res.data);
         setSelectedOptions((_) =>
-          new Array(res.data.questions.length).fill(-1)
+          res.data?.questions?.map((ele: { _id: string }) => ({
+            ans: 10,
+            id: ele._id,
+          }))
         );
       } else {
         console.error("Failed to fetch the quiz");
@@ -152,13 +159,14 @@ function StartQuiz() {
             </div>
             <div className={classes.btnGroup}>
               <button
-                disabled={selectedOptions[currentQuestionIndex].ans === -1}
+                disabled={
+                  !selectedOptions[currentQuestionIndex].ans &&
+                  selectedOptions[currentQuestionIndex].ans != 0
+                }
                 className={classes.nextBtn}
                 onClick={nextQuestion}
               >
-                {currentQuestionIndex === quiz.questions.length - 1
-                  ? "Complete"
-                  : "Next"}
+                {!loading ? (currentQuestionIndex === quiz.questions.length - 1 ? "Complete": "Next") : <Spinner />}
               </button>
             </div>
           </>
