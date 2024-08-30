@@ -37,6 +37,7 @@ function CreateQuiz({}: Props) {
   }
 
   function hideSuccessfulModal(str:string = "IN") {
+    if(str)
     navigate("/analytics");
     setSuccess((_) => false);
   }
