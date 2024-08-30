@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 type Props = {
     children: ReactNode;
     show:boolean;
-    onClose:()=>void
+    onClose:(str:string)=>void
 };
 
 const Modal = ({ show,onClose,children }: Props) => {
@@ -14,7 +14,7 @@ const Modal = ({ show,onClose,children }: Props) => {
         const handleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
             if(target.classList[0]=='modal' && show){
-                 onClose()
+                 onClose('OUT')
             }
         };
 

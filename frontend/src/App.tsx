@@ -9,9 +9,11 @@ import Analytics from './components/analytics/Analytics'
 import CreateQuiz from './components/createQuize/CreateQuiz'
 import QuizAnalytics from './components/questionAnalytics/quizAnalytics/QuizAnalytics'
 import StartQuiz from './components/startQuiz/StartQuiz'
+import HomeNavigation from './components/navigation/HomeNavigation'
 
 function App() {
   let route = createBrowserRouter([
+    {path:'*',element:<HomeNavigation/>},
     {path:"/",element:<HomePage/>,children:[
       {path:'dashboard',element:<Dashboard/>},
       {path:'analytics',element:<Analytics/>},
