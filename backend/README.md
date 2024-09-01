@@ -1,6 +1,5 @@
 Certainly! Here’s a `README.md` file for the backend of your quiz build project:
 
-```markdown
 # Quiz Build Project - Backend
 
 ## Overview
@@ -19,7 +18,7 @@ To get started with the backend, follow these steps:
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone <repository-url> OR download the file
 cd backend
 ```
 
