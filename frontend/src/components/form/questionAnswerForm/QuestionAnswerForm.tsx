@@ -7,6 +7,7 @@ import ButtonGroup from "../buttonGroup/ButtonGroup";
 import useApiClient from "../../../hooks/useApiClient";
 import { Options, Quiz } from "../../../Types/Quize";
 import classes from "./QuestionAnswerForm.module.css";
+import { validateQuiz } from "../../../utils/validation";
 
 type Prop = {
   setGeneratedLink: (str: string) => void;
@@ -33,6 +34,7 @@ const QuestionAnswerForm = ({
 }: Prop) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const { createQuiz, updateQuestions, loading } = useApiClient();
+  const [validation, setValidation] = useState("");
 
   function setIndex(i: number) {
     setSelectedIndex((_) => i);
@@ -45,7 +47,11 @@ const QuestionAnswerForm = ({
       typeOfQuiz: quizType,
       questions: questions,
     };
-
+    let isValid = validateQuiz(data);
+    if (isValid != "valid") {
+      setValidation((_) => isValid);
+      return;
+    }
     if (state == "CREATE") {
       let res = await createQuiz(data);
       setGeneratedLink(res._id);
@@ -123,7 +129,7 @@ const QuestionAnswerForm = ({
         required
         type="text"
         className={classes.pollInput}
-        placeholder="Poll Question"
+        placeholder="Enter Question"
         value={questions[selectedIndex]?.question}
         onChange={(e) =>
           setQuestions((prev) => {
@@ -188,6 +194,7 @@ const QuestionAnswerForm = ({
         )}
       </div>
       <ButtonGroup state={state} onClose={onClose} loading={loading} />
+      <h4 className={classes.validation}>{validation}</h4>
     </form>
   );
 };

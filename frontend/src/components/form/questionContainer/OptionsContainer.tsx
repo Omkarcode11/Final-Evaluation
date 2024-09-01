@@ -29,7 +29,7 @@ const OptionsContainer = ({
 }: Props) => (
   <div className={styles.optionsContainer}>
     <div className={styles.options}>
-      {options.map((ele, i) => (
+      {options?.map((ele, i) => (
         <div className={styles.option}>
           {quizType === "QA" && (
             <input
@@ -75,7 +75,7 @@ const OptionsContainer = ({
           )}
         </div>
       ))}
-      {options.length < 4 && state == "CREATE" && (
+      {options?.length < 4 && state == "CREATE" && (
         <div className={styles.addOption} onClick={addOption}>
           <div> </div>
           <div>Add Option</div>

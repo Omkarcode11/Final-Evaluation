@@ -192,3 +192,8 @@
   display: flex;
   justify-content: center;
 }
+
+.validation{
+  text-align: center;
+  color: red;
+}

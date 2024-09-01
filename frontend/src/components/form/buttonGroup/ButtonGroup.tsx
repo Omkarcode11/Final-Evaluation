@@ -15,7 +15,6 @@ const ButtonGroup = ({ state,onClose,loading }: Props) => (
       <div className={styles.spinner}>
       <Spinner size="1.5rem"/>
       </div>
-
       </button>:
     <button className={styles.addQuestion}>{state}</button>
   }
