@@ -98,3 +98,8 @@ html{
     width: 100%;
   }
 }
+
+.error{
+  text-align: center;
+  color: red;
+}

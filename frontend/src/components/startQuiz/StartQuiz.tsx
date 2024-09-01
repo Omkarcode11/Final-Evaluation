@@ -17,6 +17,7 @@ function StartQuiz() {
     quizName: "",
     typeOfQuiz: "none",
   });
+  const [error,setError] = useState('')
   const timerId = useRef<number | null>(null);
   const params = useParams();
   const [loading, setLoading] = useState<boolean>(false);
@@ -86,6 +87,7 @@ function StartQuiz() {
         console.error("Failed to fetch the quiz");
       }
     } catch (error) {
+      setError(_=>"Invalid Quiz Link")
       console.error("Error fetching the quiz:", error);
     }
   };
@@ -131,6 +133,10 @@ function StartQuiz() {
       fetchQuiz(params.quidId);
     }
   }, [params.quidId]);
+
+  if(error){
+    return <h1 className={classes.error}>{error}</h1>
+  }
 
   return (
     <div className={classes.container}>
