@@ -24,6 +24,7 @@ type question = {
   poll: number[];
   impression: number;
   correctImpression: 0;
+  options:{text:string,ImageUrl:string}[]
 };
 
 function QuizAnalytics({}: Props) {
@@ -31,12 +32,11 @@ function QuizAnalytics({}: Props) {
   let [quiz, setQuiz] = useState<Quiz>();
   let { getQuizDetail, loading } = useApiClient();
 
-  console.log(params);
-
   async function getAndSetQuiz() {
     if (!params.quizId) return;
     let data = await getQuizDetail(params.quizId);
     setQuiz((_) => data);
+
   }
 
   useEffect(() => {
@@ -54,9 +54,9 @@ function QuizAnalytics({}: Props) {
       </header>
       {loading ? (
         <div>
-        <QuestionAnalyticsShimmer />
-        <QuestionAnalyticsShimmer />
-        <QuestionAnalyticsShimmer />
+          <QuestionAnalyticsShimmer />
+          <QuestionAnalyticsShimmer />
+          <QuestionAnalyticsShimmer />
         </div>
       ) : (
         quiz?.questions.map((ele, i) => (
@@ -68,11 +68,11 @@ function QuizAnalytics({}: Props) {
             impression={ele.impression}
             question={ele.question}
             poll={ele.poll}
+            options={ele.options}
             quizType={quiz.typeOfQuiz}
-            />
-          ))
-        )}
-
+          />
+        ))
+      )}
     </div>
   );
 }

@@ -55,7 +55,7 @@ exports.getQuizById = async (req, res) => {
       .select("_id quizName typeOfQuiz impression createdAt author")
       .populate({
         path: "questions",
-        select: "question poll impression correctImpression",
+        select: "question poll impression options correctImpression",
       });
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
@@ -221,7 +221,7 @@ exports.getResult = async (req, res) => {
     let { answers, typeOfQuiz } = req.body;
     let score = 0;
 
-  for (let ans of answers) {
+    for (let ans of answers) {
       let question = await Question.findById(ans.id);
       if (typeOfQuiz == "QA" && question.answer == ans.ans) {
         question.correctImpression += 1;

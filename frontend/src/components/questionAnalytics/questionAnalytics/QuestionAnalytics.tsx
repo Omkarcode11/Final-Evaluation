@@ -5,13 +5,16 @@ type Props = {
   _id: string;
   question: string;
   poll: number[];
+  options:{text:string,ImageUrl:string}[]
   impression: number;
   correctImpression: number;
   No: number;
   quizType: "QA" | "POLL";
 };
 
+
 function QuestionAnalytics({
+  options,
   No,
   correctImpression,
   impression,
@@ -19,6 +22,11 @@ function QuestionAnalytics({
   question,
   quizType,
 }: Props) {
+
+
+  console.log(options)
+
+
   return (
     <div>
       <h2>
@@ -36,7 +44,7 @@ function QuestionAnalytics({
           </>
         ) : (
           <>
-            {poll.map((ele,i) => <ImpressionBox key={i} impression={ele} text={`Option ${i+1}`}/>)}
+            {poll.map((ele,i) => <ImpressionBox key={i} impression={ele} text={`${options[i]?.text} ${options[i].ImageUrl}`}/>)}
           </>
         )}
       </div>
