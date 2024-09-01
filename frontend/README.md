@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# Quiz Build Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project allows you to create and share quizzes easily. Once a quiz is created, you can share the generated quiz link, allowing any user to attempt the quiz. The project is divided into frontend and backend components, each deployed on live links.
 
-Currently, two official plugins are available:
+## Live Links
+- **Frontend:** [Quiz Build Frontend](https://final-evaluation-16m2.vercel.app/)
+- **Backend:** [Quiz Build Backend](https://final-evaluation.onrender.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Structure
 
-## Expanding the ESLint configuration
+### Frontend
+- **Tech Stack:** React, TypeScript, Module.css
+- **Folder:** `/frontend`
+- **Starting the Server:**
+  1. Navigate to the frontend folder:
+     ```bash
+     cd frontend
+     ```
+  2. Start the frontend server:
+     ```bash
+     npm run dev
+     ```
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- **.env Configuration:**
+  ```env
+  VITE_API_URL=<backend url>
+  VITE_CURRENT_URL=<frontend url>
