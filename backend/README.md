@@ -1,5 +1,3 @@
-Certainly! Here’s a `README.md` file for the backend of your quiz build project:
-
 # Quiz Build Project - Backend
 
 ## Overview
