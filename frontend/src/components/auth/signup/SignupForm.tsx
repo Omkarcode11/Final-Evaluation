@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../utils/constant";
 import { useNavigate } from "react-router-dom";
 import { context } from "../../context/MyContextApp";
+import Spinner from "../../spinner/Spinner";
 
 interface FormData {
   username: string;
@@ -21,7 +22,7 @@ interface FormErrors {
 }
 
 const SignupForm: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
@@ -30,6 +31,7 @@ const SignupForm: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState<Boolean>(false);
   const ctx = useContext(context);
 
   if (!ctx) {
@@ -65,22 +67,24 @@ const SignupForm: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading((_) => true);
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading((_) => false);
     } else {
-      let res = await axios.post(BASE_URL + "/api/auth/register", formData)
-      if(res.status == 201){
-        let token : {token:string} = res.data
+      let res = await axios.post(BASE_URL + "/api/auth/register", formData);
+      if (res.status == 201) {
+        let token: { token: string } = res.data;
         localStorage.setItem("quiz_builder", token.token);
         setUser({
           email: formData.email,
           isAuthorize: true,
           username: res.data.username,
         });
-        navigate('/dashboard')
+        navigate("/dashboard");
+        setLoading((_) => false);
       }
-      // Perform submission actions like sending data to a server
     }
   };
 
@@ -145,7 +149,11 @@ const SignupForm: React.FC = () => {
       )}
 
       <button type="submit" className={classes.submitButton}>
-        Sign-Up
+        {loading ? (
+          <Spinner borderWidth="2px" color="white" size="1.5rem" />
+        ) : (
+          "Sign-Up"
+        )}
       </button>
     </form>
   );
